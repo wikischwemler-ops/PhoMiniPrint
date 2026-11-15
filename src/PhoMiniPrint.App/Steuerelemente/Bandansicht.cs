@@ -60,6 +60,12 @@ public sealed class Bandansicht : FrameworkElement
     /// <summary>Die Auswahl hat gewechselt.</summary>
     public event EventHandler? AuswahlGeaendert;
 
+    /// <summary>Die Größe eines Elements wurde mit der Maus geändert (beim Loslassen).</summary>
+    public event EventHandler? GroesseGeaendert;
+
+    /// <summary>Doppelklick auf ein Element.</summary>
+    public event EventHandler? BearbeitenGewuenscht;
+
     /// <summary>Entf wurde gedrückt, während ein Element ausgewählt ist.</summary>
     public event EventHandler? EntfernenGewuenscht;
 
@@ -270,6 +276,13 @@ public sealed class Bandansicht : FrameworkElement
         else if (ElementTreffen(punkt) is { } element)
         {
             Auswahl = element;
+            if (e.ClickCount == 2)
+            {
+                BearbeitenGewuenscht?.Invoke(this, EventArgs.Empty);
+                e.Handled = true;
+                return;
+            }
+
             ZiehenBeginnen(Ziehen.Verschieben, element, punkt);
         }
         else
@@ -317,8 +330,13 @@ public sealed class Bandansicht : FrameworkElement
     protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
     {
         base.OnMouseLeftButtonUp(e);
+        var warSkalieren = _ziehen == Ziehen.Skalieren;
         _ziehen = Ziehen.Nichts;
         ReleaseMouseCapture();
+        if (warSkalieren)
+        {
+            GroesseGeaendert?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     protected override void OnKeyDown(KeyEventArgs e)

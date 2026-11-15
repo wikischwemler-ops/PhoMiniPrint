@@ -20,6 +20,9 @@ public partial class MainWindow : Window
     private bool _druckt;
     private bool _felderSetzen;
 
+    /// <summary>Zuletzt verwendete Formatierung als Vorlage für den nächsten Text.</summary>
+    private TextElement _textVorlage = new();
+
     public MainWindow()
     {
         InitializeComponent();
@@ -29,6 +32,8 @@ public partial class MainWindow : Window
         Ansicht.Geaendert += (_, _) => AktualisierenPlanen();
         Ansicht.AuswahlGeaendert += (_, _) => ElementFelderAnzeigen();
         Ansicht.EntfernenGewuenscht += (_, _) => Entfernen_Click(this, new RoutedEventArgs());
+        Ansicht.BearbeitenGewuenscht += (_, _) => TextBearbeiten_Click(this, new RoutedEventArgs());
+        Ansicht.GroesseGeaendert += (_, _) => SchriftNachfuehren(Ansicht.Auswahl);
         StaerkeRegler.WertGeaendert += (_, _) => AktualisierenPlanen();
 
         foreach (var feld in new[] { LaengeFeld, RandLinksFeld, RandRechtsFeld, RandObenFeld, RandUntenFeld })
@@ -41,6 +46,7 @@ public partial class MainWindow : Window
 
         Animation.Ruhe();
         EtikettFelderAnzeigen();
+        ElementFelderAnzeigen();
         Aktualisieren();
         Loaded += async (_, _) =>
         {
@@ -119,7 +125,9 @@ public partial class MainWindow : Window
     {
         var e = Ansicht.Auswahl;
         ElementKarte.IsEnabled = e is not null;
-        MenueEinpassen.IsEnabled = e is BildElement;
+        MenueEinpassen.IsEnabled = e is not null;
+        MenueTextBearbeiten.IsEnabled = e is TextElement;
+        TextBearbeitenKnopf.Visibility = e is TextElement ? Visibility.Visible : Visibility.Collapsed;
         MenueEntfernen.IsEnabled = e is not null;
         _felderSetzen = true;
         BreiteFeld.Text = e is null ? string.Empty : Zahl(e.Breite);
@@ -128,7 +136,7 @@ public partial class MainWindow : Window
         ElementTitel.Text = e switch
         {
             BildElement => "BILD",
-            TextElement => "TEXT",
+            TextElement t => $"TEXT · {t.GroessePt.ToString("0.#", Deutsch)} pt",
             _ => "ELEMENT (keins ausgewählt)",
         };
         Drehen0.IsChecked = e?.Drehung == Drehung.Grad0;
@@ -148,6 +156,7 @@ public partial class MainWindow : Window
         if (ZahlLesen(feld, out var wert) && wert > 0)
         {
             Bearbeitung.GroesseSetzen(element, breite ? wert : null, breite ? null : wert, _etikett);
+            SchriftNachfuehren(element);
         }
 
         ElementFelderAnzeigen();
@@ -197,11 +206,11 @@ public partial class MainWindow : Window
     {
         var leer = _etikett.Elemente.Count == 0;
         Illustration.Visibility = leer || _druckt ? Visibility.Visible : Visibility.Collapsed;
-        StartKnopf.Visibility = _druckt ? Visibility.Collapsed : Visibility.Visible;
+        StartKnoepfe.Visibility = _druckt ? Visibility.Collapsed : Visibility.Visible;
         if (!_druckt)
         {
             IllustrationTitel.Text = "Bild oder Text einfügen";
-            IllustrationText.Text = "PNG oder JPG hierher ziehen oder über „Bild einfügen“ öffnen";
+            IllustrationText.Text = "PNG oder JPG hierher ziehen, ein Bild öffnen oder einen Text mit Symbolen schreiben";
         }
     }
 
@@ -254,14 +263,105 @@ public partial class MainWindow : Window
         }
     }
 
+    // ---------- Text ----------
+
+    private void TextEinfuegen_Click(object sender, RoutedEventArgs e)
+    {
+        if (_druckt)
+        {
+            return;
+        }
+
+        var dialog = new TextDialog(new TextElement
+        {
+            Schriftart = _textVorlage.Schriftart,
+            GroessePt = _textVorlage.GroessePt,
+            Fett = _textVorlage.Fett,
+            Ausrichtung = _textVorlage.Ausrichtung,
+        })
+        { Owner = this };
+        if (dialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        var text = new TextElement();
+        TextUebernehmen(dialog, text);
+        var (x, y, b, h) = _etikett.Druckbereich;
+        TextPlatzieren(text, new Point(x + (b / 2), y + (h / 2)));
+        _etikett.Elemente.Add(text);
+        Ansicht.Auswahl = text;
+        Ansicht.Focus();
+        ElementFelderAnzeigen();
+        Aktualisieren();
+    }
+
+    private void TextBearbeiten_Click(object sender, RoutedEventArgs e)
+    {
+        if (_druckt || Ansicht.Auswahl is not TextElement text)
+        {
+            return;
+        }
+
+        var dialog = new TextDialog(text) { Owner = this };
+        if (dialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        var mitte = new Point(text.X + (text.Breite / 2), text.Y + (text.Hoehe / 2));
+        TextUebernehmen(dialog, text);
+        TextPlatzieren(text, mitte);
+        ElementFelderAnzeigen();
+        Ansicht.InvalidateVisual();
+        Aktualisieren();
+    }
+
+    private void TextUebernehmen(TextDialog dialog, TextElement text)
+    {
+        text.Text = dialog.Text;
+        text.Schriftart = dialog.Schriftart;
+        text.GroessePt = dialog.GroessePt;
+        text.Fett = dialog.Fett;
+        text.Ausrichtung = dialog.Ausrichtung;
+        _textVorlage = new TextElement { Schriftart = text.Schriftart, GroessePt = text.GroessePt, Fett = text.Fett, Ausrichtung = text.Ausrichtung };
+    }
+
+    /// <summary>Bemisst den Text, setzt ihn mittig auf den Punkt und verkleinert ihn, falls er nicht in den Druckbereich passt.</summary>
+    private void TextPlatzieren(TextElement text, Point mitte)
+    {
+        Renderer.TextBemessen(text);
+        var (x, y, b, h) = _etikett.Druckbereich;
+        if (text.Breite > b || text.Hoehe > h)
+        {
+            text.X = x;
+            text.Y = y;
+            Bearbeitung.GroesseSetzen(text, text.Breite, null, _etikett);
+            Renderer.SchriftgroesseAusKasten(text);
+        }
+
+        Bearbeitung.Verschieben(text, mitte.X - (text.Breite / 2), mitte.Y - (text.Hoehe / 2), _etikett);
+    }
+
+    /// <summary>Nach einer Größenänderung die Schriftgröße in pt anpassen.</summary>
+    private void SchriftNachfuehren(Element? element)
+    {
+        if (element is TextElement text)
+        {
+            Renderer.SchriftgroesseAusKasten(text);
+            ElementFelderAnzeigen();
+        }
+    }
+
     // ---------- Element bearbeiten ----------
 
     private void Drehen_Click(object sender, RoutedEventArgs e)
     {
-        if (Ansicht.Auswahl is BildElement bild && sender is FrameworkElement { Tag: string winkel })
+        if (Ansicht.Auswahl is { } element && sender is FrameworkElement { Tag: string winkel })
         {
-            Layout.Drehen(bild, (Drehung)int.Parse(winkel, CultureInfo.InvariantCulture));
-            Bearbeitung.Verschieben(bild, bild.X, bild.Y, _etikett);
+            Layout.Drehen(element, (Drehung)int.Parse(winkel, CultureInfo.InvariantCulture));
+            Bearbeitung.GroesseSetzen(element, element.Breite, null, _etikett);
+            SchriftNachfuehren(element);
             ElementFelderAnzeigen();
             Ansicht.InvalidateVisual();
             Aktualisieren();
@@ -270,9 +370,10 @@ public partial class MainWindow : Window
 
     private void Einpassen_Click(object sender, RoutedEventArgs e)
     {
-        if (Ansicht.Auswahl is BildElement bild)
+        if (Ansicht.Auswahl is { } element)
         {
-            Layout.MaximalEinpassen(_etikett, bild);
+            Layout.MaximalEinpassen(_etikett, element);
+            SchriftNachfuehren(element);
             ElementFelderAnzeigen();
             Ansicht.InvalidateVisual();
             Aktualisieren();

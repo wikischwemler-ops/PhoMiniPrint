@@ -23,15 +23,31 @@ public static class Layout
         drehung is Drehung.Grad90 or Drehung.Grad270 ? 1.0 / verhaeltnis : verhaeltnis;
 
     /// <summary>
-    /// Passt ein Bild so groß wie möglich und zentriert in den Druckbereich ein,
-    /// ohne es zu verzerren (FR-019, Q-A2d).
+    /// Seitenverhältnis Breite ÷ Höhe eines Elements vor der Drehung: bei Bildern aus den Pixeln,
+    /// bei Text aus dem (bemessenen) Kasten.
     /// </summary>
-    public static void MaximalEinpassen(Etikett etikett, BildElement bild)
+    public static double Grundverhaeltnis(Element element)
+    {
+        ArgumentNullException.ThrowIfNull(element);
+        if (element is BildElement bild)
+        {
+            return bild.Seitenverhaeltnis;
+        }
+
+        var quer = element.Drehung is Drehung.Grad90 or Drehung.Grad270;
+        return quer ? element.Hoehe / element.Breite : element.Breite / element.Hoehe;
+    }
+
+    /// <summary>
+    /// Passt ein Element so groß wie möglich und zentriert in den Druckbereich ein,
+    /// ohne es zu verzerren (FR-019, Q-A2d). Text muss vorher bemessen sein.
+    /// </summary>
+    public static void MaximalEinpassen(Etikett etikett, Element bild)
     {
         ArgumentNullException.ThrowIfNull(etikett);
         ArgumentNullException.ThrowIfNull(bild);
         var (x, y, breite, hoehe) = etikett.Druckbereich;
-        var v = SeitenverhaeltnisGedreht(bild.Seitenverhaeltnis, bild.Drehung);
+        var v = SeitenverhaeltnisGedreht(Grundverhaeltnis(bild), bild.Drehung);
 
         var b = breite;
         var h = b / v;
@@ -48,20 +64,27 @@ public static class Layout
     }
 
     /// <summary>
-    /// Dreht ein Bild und skaliert es auf die vorgegebene Größe (FR-017):
-    /// Es behält seinen Mittelpunkt und füllt die bisherige Fläche so weit wie möglich,
-    /// ohne verzerrt zu werden.
+    /// Dreht ein Element um seinen Mittelpunkt (FR-017).
+    /// Ein Bild wird auf die vorgegebene Größe skaliert: Es füllt die bisherige Fläche so weit wie möglich,
+    /// ohne verzerrt zu werden. Text behält seine Schriftgröße; Breite und Höhe tauschen bei 90°/270°.
     /// </summary>
-    public static void Drehen(BildElement bild, Drehung neu)
+    public static void Drehen(Element bild, Drehung neu)
     {
         ArgumentNullException.ThrowIfNull(bild);
         var mitteX = bild.X + (bild.Breite / 2);
         var mitteY = bild.Y + (bild.Hoehe / 2);
         var flaecheB = bild.Breite;
         var flaecheH = bild.Hoehe;
+        var grund = Grundverhaeltnis(bild);
+        var warQuer = bild.Drehung is Drehung.Grad90 or Drehung.Grad270;
+        var wirdQuer = neu is Drehung.Grad90 or Drehung.Grad270;
+        if (bild is not BildElement && warQuer != wirdQuer)
+        {
+            (flaecheB, flaecheH) = (flaecheH, flaecheB);
+        }
 
         bild.Drehung = neu;
-        var v = SeitenverhaeltnisGedreht(bild.Seitenverhaeltnis, neu);
+        var v = SeitenverhaeltnisGedreht(grund, neu);
         var b = flaecheB;
         var h = b / v;
         if (h > flaecheH)

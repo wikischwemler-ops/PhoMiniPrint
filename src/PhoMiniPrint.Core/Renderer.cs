@@ -95,9 +95,8 @@ public static class Renderer
                 case BildElement bild:
                     dc.DrawImage(bild.Quelle, kasten);
                     break;
-                case TextElement text:
-                    var ft = TextFormatieren(text, b0);
-                    dc.DrawText(ft, kasten.TopLeft);
+                case TextElement text when !string.IsNullOrEmpty(text.Text):
+                    TextInKastenZeichnen(dc, text, kasten);
                     break;
             }
 
@@ -106,13 +105,56 @@ public static class Renderer
         }
     }
 
+    /// <summary>
+    /// Zeichnet den Text in natürlicher Größe und skaliert ihn gleichmäßig in seinen Kasten.
+    /// So stimmen Anfasser, Ansicht und Druck überein, auch nachdem der Kasten mit der Maus verändert wurde.
+    /// </summary>
+    private static void TextInKastenZeichnen(DrawingContext dc, TextElement text, Rect kasten)
+    {
+        var ft = TextFormatieren(text);
+        var natB = Math.Max(ft.WidthIncludingTrailingWhitespace, 1e-6);
+        var natH = Math.Max(ft.Height, 1e-6);
+        var s = Math.Min(kasten.Width / natB, kasten.Height / natH);
+        var dx = (kasten.Width - (natB * s)) / 2;
+        var dy = (kasten.Height - (natH * s)) / 2;
+        dc.PushTransform(new TranslateTransform(kasten.X + dx, kasten.Y + dy));
+        dc.PushTransform(new ScaleTransform(s, s));
+        dc.DrawText(ft, new Point(0, 0));
+        dc.Pop();
+        dc.Pop();
+    }
+
+    /// <summary>
+    /// Übernimmt die Größe des Kastens in die Schriftgröße (nach Ziehen an einer Ecke oder Einpassen),
+    /// damit der Dialog die tatsächliche Größe in pt zeigt.
+    /// </summary>
+    public static void SchriftgroesseAusKasten(TextElement text)
+    {
+        ArgumentNullException.ThrowIfNull(text);
+        if (string.IsNullOrEmpty(text.Text) || text.Breite <= 0 || text.Hoehe <= 0)
+        {
+            return;
+        }
+
+        StaAusfuehren(() =>
+        {
+            var ft = TextFormatieren(text);
+            var quer = text.Drehung is Drehung.Grad90 or Drehung.Grad270;
+            var b0 = quer ? text.Hoehe : text.Breite;
+            var h0 = quer ? text.Breite : text.Hoehe;
+            var s = Math.Min(b0 / ft.WidthIncludingTrailingWhitespace, h0 / ft.Height);
+            text.GroessePt = Math.Round(text.GroessePt * s, 1);
+            return 0;
+        });
+    }
+
     /// <summary>Bemisst einen Text und setzt Breite/Höhe des Elements (in mm, auf Druckerpunkte gerundet).</summary>
     public static void TextBemessen(TextElement text)
     {
         ArgumentNullException.ThrowIfNull(text);
         StaAusfuehren(() =>
         {
-            var ft = TextFormatieren(text, null);
+            var ft = TextFormatieren(text);
             // Aufrunden: eine minimal zu schmale Breite würde beim Zeichnen einen Zeilenumbruch auslösen.
             var b = Layout.AufPunktAufrunden(Math.Max(Layout.PunktMm, ft.WidthIncludingTrailingWhitespace));
             var h = Layout.AufPunktAufrunden(Math.Max(Layout.PunktMm, ft.Height));
@@ -123,7 +165,8 @@ public static class Renderer
         });
     }
 
-    private static FormattedText TextFormatieren(TextElement text, double? breite)
+    /// <summary>Formatiert den Text in natürlicher Größe; Zeilen nur an Zeilenumbrüchen, Ausrichtung je Zeile.</summary>
+    private static FormattedText TextFormatieren(TextElement text)
     {
         var typeface = new Typeface(
             new FontFamily(text.Schriftart),
@@ -146,9 +189,10 @@ public static class Renderer
                 _ => TextAlignment.Left,
             },
         };
-        if (breite is > 0)
+        if (text.Ausrichtung != Textausrichtung.Links)
         {
-            ft.MaxTextWidth = breite.Value;
+            // Ausrichtung wirkt nur mit fester Breite: breiteste Zeile plus Spielraum gegen Umbruch.
+            ft.MaxTextWidth = ft.WidthIncludingTrailingWhitespace + 1e-3;
         }
 
         return ft;

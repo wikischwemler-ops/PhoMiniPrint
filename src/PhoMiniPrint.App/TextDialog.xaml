@@ -1,0 +1,78 @@
+<Window x:Class="PhoMiniPrint.App.TextDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Text einfügen" Width="620" SizeToContent="Height"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Icon="{StaticResource ProgrammIcon}"
+        Background="{StaticResource Hintergrund}"
+        Language="de-DE">
+    <StackPanel Margin="16">
+        <!-- Schrift -->
+        <Grid Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="82" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="14" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="SchriftAuswahl" IsEditable="False" ToolTip="Schriftart" SelectionChanged="Einstellung_Geaendert">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontFamily="{Binding}" Foreground="Black" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox x:Name="GroesseAuswahl" Grid.Column="2" IsEditable="True" ToolTip="Schriftgröße in pt"
+                      TextBoxBase.TextChanged="Einstellung_Geaendert" />
+            <ToggleButton x:Name="FettKnopf" Grid.Column="4" Style="{StaticResource Knopf}" Width="34" ToolTip="Fett"
+                          Click="Einstellung_Geaendert">
+                <TextBlock Text="F" FontWeight="Bold" />
+            </ToggleButton>
+            <StackPanel Grid.Column="6" Orientation="Horizontal">
+                <RadioButton x:Name="Links" GroupName="Ausrichtung" Width="34" Margin="0,0,3,0" ToolTip="Links" Click="Einstellung_Geaendert"
+                             FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Content="&#xE8E4;" />
+                <RadioButton x:Name="Mittig" GroupName="Ausrichtung" Width="34" Margin="0,0,3,0" ToolTip="Mittig" Click="Einstellung_Geaendert"
+                             FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Content="&#xE8E3;" />
+                <RadioButton x:Name="Rechts" GroupName="Ausrichtung" Width="34" ToolTip="Rechts" Click="Einstellung_Geaendert"
+                             FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Content="&#xE8E2;" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Text -->
+        <TextBox x:Name="Textfeld" Height="130" AcceptsReturn="True" TextWrapping="NoWrap"
+                 HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Padding="8,6"
+                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                 FontSize="22" TextChanged="Einstellung_Geaendert" />
+        <DockPanel Margin="2,6,2,0">
+            <TextBlock x:Name="HoeheText" DockPanel.Dock="Right" Foreground="{StaticResource TextGedimmt}" FontSize="11" />
+            <TextBlock Foreground="{StaticResource TextGedimmt}" FontSize="11" Text="Neue Zeile mit der Eingabetaste" />
+        </DockPanel>
+        <TextBlock x:Name="WarnText" Margin="2,6,2,0" Foreground="{StaticResource Fehler}" TextWrapping="Wrap" Visibility="Collapsed" />
+
+        <!-- Symbole -->
+        <TextBlock Style="{StaticResource Ueberschrift}" Margin="0,14,0,6" Text="SYMBOLE – Klick fügt an der Schreibmarke ein" />
+        <ItemsControl x:Name="SymbolListe">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Width="38" Height="34" Margin="0,0,4,4" Padding="0" Focusable="False"
+                            Content="{Binding}" FontFamily="Segoe UI Symbol, Segoe UI Emoji" FontSize="17"
+                            ToolTip="{Binding}" Click="Symbol_Click" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <Button x:Name="OkKnopf" Style="{StaticResource KnopfHaupt}" FontSize="13" Padding="22,6" IsDefault="False"
+                    Content="Übernehmen" Click="Ok_Click" />
+            <Button Margin="8,0,0,0" Padding="18,6" IsCancel="True" Content="Abbrechen" />
+        </StackPanel>
+    </StackPanel>
+</Window>

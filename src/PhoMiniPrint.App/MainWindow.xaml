@@ -11,20 +11,24 @@
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{x:Static s:Befehle.BildEinfuegen}" />
         <KeyBinding Key="P" Modifiers="Control" Command="{x:Static s:Befehle.Drucken}" />
+        <KeyBinding Key="T" Modifiers="Control" Command="{x:Static s:Befehle.TextEinfuegen}" />
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static s:Befehle.BildEinfuegen}" Executed="BildEinfuegen_Click" />
         <CommandBinding Command="{x:Static s:Befehle.Drucken}" Executed="Drucken_Click" />
+        <CommandBinding Command="{x:Static s:Befehle.TextEinfuegen}" Executed="TextEinfuegen_Click" />
     </Window.CommandBindings>
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Datei">
                 <MenuItem Header="_Bild einfügen …" InputGestureText="Strg+O" Click="BildEinfuegen_Click" />
+                <MenuItem Header="_Text einfügen …" InputGestureText="Strg+T" Click="TextEinfuegen_Click" />
                 <Separator />
                 <MenuItem Header="_Beenden" Click="Beenden_Click" />
             </MenuItem>
             <MenuItem Header="_Bearbeiten">
+                <MenuItem x:Name="MenueTextBearbeiten" Header="_Text bearbeiten …" Click="TextBearbeiten_Click" />
                 <MenuItem x:Name="MenueEinpassen" Header="Maximal _einpassen" Click="Einpassen_Click" />
                 <MenuItem x:Name="MenueEntfernen" Header="Element _entfernen" InputGestureText="Entf" Click="Entfernen_Click" />
             </MenuItem>
@@ -111,6 +115,7 @@
                             <RadioButton x:Name="Drehen180" GroupName="Drehung" Margin="3,0" Content="180°" Click="Drehen_Click" Tag="180" />
                             <RadioButton x:Name="Drehen270" GroupName="Drehung" Margin="3,0,0,0" Content="270°" Click="Drehen_Click" Tag="270" />
                         </UniformGrid>
+                        <Button x:Name="TextBearbeitenKnopf" Margin="0,8,0,0" Content="Text bearbeiten …" Click="TextBearbeiten_Click" />
                         <UniformGrid Columns="2" Margin="0,8,0,0">
                             <Button Margin="0,0,3,0" Content="Maximal einpassen" Click="Einpassen_Click" />
                             <Button Margin="3,0,0,0" Content="Entfernen" Click="Entfernen_Click" />
@@ -156,13 +161,21 @@
                     <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,28">
                         <TextBlock x:Name="IllustrationTitel" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Text="Bild oder Text einfügen" />
                         <TextBlock x:Name="IllustrationText" HorizontalAlignment="Center" Margin="0,6,0,14" Foreground="{StaticResource TextGedimmt}"
-                                   Text="PNG oder JPG hierher ziehen oder über „Bild einfügen“ öffnen" />
-                        <Button x:Name="StartKnopf" HorizontalAlignment="Center" Padding="18,7" Click="BildEinfuegen_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xEB9F;" VerticalAlignment="Center" Margin="0,0,8,0" />
-                                <TextBlock Text="Bild einfügen …" />
-                            </StackPanel>
-                        </Button>
+                                   Text="PNG oder JPG hierher ziehen, ein Bild öffnen oder einen Text mit Symbolen schreiben" />
+                        <StackPanel x:Name="StartKnoepfe" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Padding="18,7" Click="BildEinfuegen_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xEB9F;" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock Text="Bild einfügen …" />
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="10,0,0,0" Padding="18,7" Click="TextEinfuegen_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE8D2;" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock Text="Text einfügen …" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </Grid>
