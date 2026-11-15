@@ -1,6 +1,6 @@
 # Anforderungsentwurf – PhoMiniPrint
 
-- **Projektstatus:** ANFORDERUNGSENTWURF (vor der fachlichen Prüfung)
+- **Projektstatus:** fachlich freigegeben am 2026-11-15 – gültige Fassung siehe [REQUIREMENTS.md](REQUIREMENTS.md)
 - **Grundlage:** [REQUIREMENTS_INPUT.md](REQUIREMENTS_INPUT.md), [ANALYSIS_SUMMARY.md](ANALYSIS_SUMMARY.md)
 - **Offene Fragen:** [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md)
 
@@ -25,21 +25,23 @@
 | FR-002 🔒 | Verbindung über Bluetooth | USER | MUST | CONFIRMED |
 | FR-003 | Verbindungsstatus anzeigen | DERIVED | MUST | OPEN |
 | FR-004 🔒 | Bild auf exakte Größe skalieren und so drucken | USER | MUST | CONFIRMED |
-| FR-005 | Bilddatei öffnen | DERIVED | MUST | OPEN |
+| FR-005 | Bilddatei öffnen (PNG, JPG) | DERIVED | MUST | CONFIRMED |
 | FR-006 | Länge und Höhe in mm, Seitenverhältnis bleibt | USER | MUST | CONFIRMED |
-| FR-007 | Umwandlung in Schwarz-Weiß | DERIVED | MUST | OPEN |
+| FR-007 | Schwarz-Weiß: Regler Umwandlung + Regler Druckdichte, je 0–100 % mit Zahl | USER | MUST | CONFIRMED |
 | FR-008 | Prüfung gegen die bedruckbare Höhe | DERIVED | MUST | OPEN |
-| FR-009 🔒 | Text schreiben und drucken, auch mit Symbolen | USER | MUST | CONFIRMED |
-| FR-010 | Textformatierung | DERIVED | SHOULD | OPEN |
+| FR-009 🔒 | Text mit Symbolen (Unicode + Emojis s/w, Symbolauswahl) | USER | MUST | CONFIRMED |
+| FR-010 | Text: Größe, Schriftart, fett, Ausrichtung | USER | MUST | CONFIRMED |
 | FR-011 | Druckvorschau | AI PROPOSAL | SHOULD | PROPOSED |
 | FR-012 | Kalibrierung mit Testseite, nur über Menü, gespeichert | USER | MUST | CONFIRMED |
-| FR-013 | Bild und Text kombinieren | AI PROPOSAL | COULD | PROPOSED |
+| FR-013 | Bild und Text auf einem Ausdruck | USER | MUST | CONFIRMED |
 | FR-014 | Einstellungen merken | AI PROPOSAL | COULD | PROPOSED |
-| FR-015 | Bild aus Zwischenablage | AI PROPOSAL | COULD | PROPOSED |
+| FR-015 | Bild aus Zwischenablage | AI PROPOSAL | COULD | REJECTED |
 | FR-016 | Ränder einzeln je Seite, gespeichert | USER | MUST | CONFIRMED |
 | FR-017 | Drehen 0/90/180/270° per Benutzerauswahl, immer auf Vorgabegröße | USER | MUST | CONFIRMED |
 | FR-018 | Versionsinformation in der Software | USER | MUST | OPEN |
 | FR-019 | Bandansicht, automatisch max. einpassen, Anpassen mit Maus | USER | MUST | CONFIRMED |
+| FR-020 | Akkustand und Papierstatus (Papierstau, kein Papier) im Status | USER | MUST | CONFIRMED |
+| FR-021 | Bluetooth-Signalstärke im Status (% und Balken) | USER | MUST | CONFIRMED |
 | NFR-001 🔒 | Programm auf Deutsch | USER | MUST | CONFIRMED |
 | NFR-002 | Läuft unter Windows 11 | USER | MUST | CONFIRMED |
 | NFR-003 | Maßgenauigkeit ±1 mm | USER | MUST | CONFIRMED |
@@ -77,6 +79,26 @@
 - **Akzeptanzkriterien:** Statusanzeige mit mindestens „nicht verbunden“, „verbindet …“, „bereit“, „Fehler“.
 - **Abhängigkeiten:** FR-002
 
+### FR-020 Akkustand und Papierstatus im Status
+- **Beschreibung:** Im Druckerstatus werden zusätzlich der **Akkustand** des T02 (in % und als Balken) und der **Papierstatus** angezeigt, insbesondere **Papierstau** und **kein Papier**. Bei einem Papierproblem wird der Druck nicht gestartet bzw. mit einer deutschen Meldung abgebrochen.
+- **Herkunft:** USER (Q-E3, 2026-11-15)
+- **Priorität / Status:** MUST / CONFIRMED
+- **Akzeptanzkriterien:**
+  - Der Akkustand ist bei verbundenem Drucker sichtbar, **als Zahl in % und zusätzlich als Balkenanzeige** (USER, 2026-11-15).
+  - Papierstau bzw. fehlendes Papier wird angezeigt, sobald der Drucker es meldet.
+- **Risiko:** Ob und wie genau der T02 Akku und Papierzustand über Bluetooth meldet, ist noch nicht belegt. Wird im Prototyp geprüft (INT-001). Meldet der Drucker einen Wert nicht, wird das dem Benutzer zur Entscheidung vorgelegt.
+- **Abhängigkeiten:** FR-003, INT-001
+
+### FR-021 Bluetooth-Signalstärke im Status
+- **Beschreibung:** Im Druckerstatus wird die **Signalstärke der Bluetooth-Verbindung** zum T02 angezeigt, ähnlich wie der Akkustand: **als Zahl in % und als Balkenanzeige**.
+- **Herkunft:** USER (2026-11-15)
+- **Priorität / Status:** MUST / CONFIRMED
+- **Akzeptanzkriterien:**
+  - Bei verbundenem oder gefundenem Drucker ist die Signalstärke als % und als Balken sichtbar.
+  - Entfernt man den Drucker vom PC, nimmt die Anzeige erkennbar ab.
+- **Risiko:** Der T02 nutzt Bluetooth Classic. Windows liefert die Signalstärke (RSSI) für Classic-Geräte nicht zuverlässig über eine öffentliche Schnittstelle, teils nur während der Gerätesuche. Wird im Prototyp geprüft (INT-001). Lässt sie sich während der Verbindung nicht messen, wird dem Benutzer eine Alternative zur Entscheidung vorgelegt (z. B. Anzeige nur bei der Suche oder Verbindungsqualität aus Übertragungsfehlern).
+- **Abhängigkeiten:** FR-003, FR-020, INT-001
+
 ### FR-004 🔒 Bild auf exakte Größe skalieren und so drucken
 - **Beschreibung:** Bilder können auf eine exakte Größe skaliert und in genau dieser Größe gedruckt werden.
 - **Herkunft:** USER (Mindestanforderung 3; Hauptmangel von TiMini-Print)
@@ -85,10 +107,10 @@
 - **Abhängigkeiten:** FR-005, FR-006, FR-007, FR-008, BR-002, NFR-003
 
 ### FR-005 Bilddatei öffnen
-- **Beschreibung:** Bilddateien vom PC laden.
-- **Herkunft:** DERIVED – Voraussetzung für FR-004.
-- **Priorität / Status:** MUST / OPEN (Formate: Q-B1)
-- **Akzeptanzkriterien:** Mindestens PNG und JPG lassen sich öffnen. Weitere Formate laut Antwort Q-B1.
+- **Beschreibung:** Bilddateien im Format **PNG und JPG** vom PC laden.
+- **Herkunft:** DERIVED – Voraussetzung für FR-004. Formate: USER (Q-B1, 2026-11-15).
+- **Priorität / Status:** MUST / CONFIRMED
+- **Akzeptanzkriterien:** PNG- und JPG-Dateien (.png, .jpg, .jpeg) lassen sich öffnen. Andere Formate werden mit einer deutschen Meldung abgelehnt.
 - **Abhängigkeiten:** –
 
 ### FR-006 Größe in physischer Einheit eingeben
@@ -110,11 +132,17 @@
 - **Abhängigkeiten:** FR-006, BR-001, BR-002
 
 ### FR-007 Umwandlung in Schwarz-Weiß
-- **Beschreibung:** Farb- und Graustufenbilder werden für den Thermodruck in reines Schwarz-Weiß umgewandelt.
-- **Herkunft:** DERIVED – der Thermodrucker kann nur Schwarz/Weiß drucken.
-- **Priorität / Status:** MUST / OPEN (Art und Regler: Q-B2)
-- **Akzeptanzkriterien:** Fotos bleiben erkennbar, Linien und Text bleiben scharf.
-- **Abhängigkeiten:** FR-004
+- **Beschreibung:** Farb- und Graustufenbilder werden für den Thermodruck in reines Schwarz-Weiß umgewandelt. Es gibt **zwei getrennte Schieberegler**, jeweils **0–100 %** mit **sichtbarem Zahlenwert**:
+  1. **Stärke für Schwarz (Umwandlung):** ab welcher Helligkeit ein Bildpunkt schwarz wird; mehr % = mehr Fläche wird schwarz.
+  2. **Druckdichte:** wie dunkel der Drucker druckt (Hitze des Druckkopfs).
+- **Herkunft:** DERIVED (Thermodruck kann nur Schwarz/Weiß) und USER (Regler 0–100 % mit Zahl: Q-B2; zwei Regler: Q-B2b, beide 2026-11-15)
+- **Priorität / Status:** MUST / CONFIRMED (Startwerte/Speichern: Q-B2c offen)
+- **Akzeptanzkriterien:**
+  - Zwei Schieberegler von 0 bis 100 %, der eingestellte Wert steht jeweils als Zahl daneben.
+  - Eine Änderung der Umwandlung ist in der Bandansicht (FR-019) sofort sichtbar. Eine Änderung der Druckdichte ist auf dem Ausdruck erkennbar heller bzw. dunkler.
+  - Fotos bleiben erkennbar, Linien und Text bleiben scharf.
+- **Risiko:** Ob und in wie vielen Stufen der T02 die Druckdichte über Bluetooth einstellen lässt, ist noch nicht belegt; wird im Prototyp geprüft (INT-001). Die 0–100 % werden dann auf die verfügbaren Stufen abgebildet.
+- **Abhängigkeiten:** FR-004, FR-019, INT-001
 
 ### FR-008 Prüfung gegen die bedruckbare Höhe
 - **Beschreibung:** Ist die eingestellte Höhe (plus Ränder oben/unten) größer als die bedruckbare Höhe, wird das vor dem Druck gemeldet. Das Programm verkleinert nicht stillschweigend.
@@ -159,15 +187,22 @@
 ### FR-009 🔒 Text schreiben und drucken, auch mit Symbolen
 - **Beschreibung:** Text kann geschrieben und gedruckt werden, auch mit Symbolen.
 - **Herkunft:** USER (Mindestanforderung 4)
-- **Priorität / Status:** MUST / CONFIRMED (welche Symbole: Q-C1)
-- **Akzeptanzkriterien:** Eingegebener Text inklusive der in Q-C1 genannten Symbole erscheint vollständig und lesbar auf dem Ausdruck, ohne Kästchen oder Fragezeichen.
+- **Priorität / Status:** MUST / CONFIRMED
+- **Symbolumfang (Q-C1, 2026-11-15):** vom Benutzer an die KI übertragen („frei wählbar für dich“). **KI-Festlegung im Auftrag des Benutzers**, jederzeit änderbar:
+  - Unicode-Sonderzeichen aus *Segoe UI* / *Segoe UI Symbol*, z. B. ° ² ³ € § ± × ÷ ✓ ✗ ★ ☆ ♥ → ← ↑ ↓ ☎ ⚠ ☀ ♪ ✂ ✉
+  - Emojis aus *Segoe UI Emoji*, gedruckt in Schwarz-Weiß
+  - Icons/Piktogramme außerhalb von Unicode: LATER
+  - Eingabe per Tastatur/Einfügen und über eine Symbolauswahl im Programm (Q-C2)
+- **Akzeptanzkriterien:**
+  - Ein Testtext mit `° ² € § ± ✓ ✗ ★ ♥ → ☎ ⚠ 😀 👍` erscheint vollständig und lesbar auf dem Ausdruck, ohne Kästchen oder Fragezeichen.
+  - Die Symbolauswahl fügt ein gewähltes Symbol an der Cursorposition ein.
 - **Abhängigkeiten:** FR-010, BR-002
 
 ### FR-010 Textformatierung
-- **Beschreibung:** Schriftgröße und weitere Formatierung des Textes einstellen.
-- **Herkunft:** DERIVED – Text muss auf die schmale Druckbreite passen.
-- **Priorität / Status:** SHOULD / OPEN (Umfang: Q-C3, Q-C4)
-- **Akzeptanzkriterien:** Mindestens die Schriftgröße ist einstellbar, mehrzeiliger Text wird umbrochen.
+- **Beschreibung:** Einstellbar sind genau: **Schriftgröße, Schriftart, fett, Ausrichtung** (links, mittig, rechts).
+- **Herkunft:** USER (Q-C3, 2026-11-15)
+- **Priorität / Status:** MUST / CONFIRMED (Text in exakter Größe: Q-C4 offen)
+- **Akzeptanzkriterien:** Alle vier Einstellungen sind in der Oberfläche vorhanden und wirken sichtbar in der Bandansicht und auf dem Ausdruck. **[KI-Hinweis, unbestätigt]** Zeilenumbruch bei zu langem Text und kursiv sind nicht verlangt; mehrzeiliger Text wird vorerst durch Eingabe von Zeilenumbrüchen ermöglicht.
 - **Abhängigkeiten:** FR-009
 
 ### FR-011 Druckvorschau
@@ -191,9 +226,11 @@
 - **Abhängigkeiten:** BR-002, NFR-003
 
 ### FR-013 Bild und Text kombinieren
-- **Beschreibung:** Bild und Text auf einem gemeinsamen Ausdruck.
-- **Herkunft:** AI PROPOSAL
-- **Priorität / Status:** COULD / PROPOSED (Q-C5)
+- **Beschreibung:** Bild und Text können auf einem gemeinsamen Ausdruck stehen, z. B. Logo mit Beschriftung. Beide werden in der Bandansicht platziert (FR-019).
+- **Herkunft:** USER (Q-C5, 2026-11-15). Ursprünglich KI-Vorschlag.
+- **Priorität / Status:** MUST / CONFIRMED
+- **Akzeptanzkriterien:** Ein Ausdruck mit einem Bild und einem Text erscheint so, wie er in der Bandansicht angeordnet ist, ±1 mm (NFR-003).
+- **Abhängigkeiten:** FR-004, FR-009, FR-019
 
 ### FR-014 Einstellungen merken
 - **Beschreibung:** Letzter Drucker, letzte Größe und Vorlagen bleiben gespeichert.
@@ -203,7 +240,7 @@
 ### FR-015 Bild aus Zwischenablage
 - **Beschreibung:** Bild mit Strg+V einfügen.
 - **Herkunft:** AI PROPOSAL
-- **Priorität / Status:** COULD / PROPOSED (Q-B1)
+- **Priorität / Status:** COULD / REJECTED (Q-B1, 2026-11-15: PNG und JPG reichen)
 
 ---
 
@@ -276,6 +313,7 @@
 - **Beschreibung:** Kommunikation mit dem T02 über dessen Bluetooth-Protokoll (laut TiMini-Print Bluetooth Classic, herstellerspezifisch, kein ESC/POS).
 - **Herkunft:** DERIVED – aus FR-001, FR-002 und dem erfolgreichen Test von TiMini-Print.
 - **Priorität / Status:** MUST / OPEN
+- **Ist-Stand (2026-11-15):** T02 ist in Windows gekoppelt („T02“, Status OK, Q-E2). Windows stellt zwei Bluetooth-COM-Ports bereit (COM9, COM10). Ob die Verbindung über einen dieser seriellen Ports oder direkt per RFCOMM-Socket läuft, klärt der Prototyp.
 - **Akzeptanzkriterien:** Bilddaten in voller Druckbreite werden fehlerfrei übertragen und gedruckt.
 
 ### INT-002 TiMini-Print als Protokollreferenz

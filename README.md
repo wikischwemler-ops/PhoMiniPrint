@@ -25,14 +25,16 @@
 
 ## Stand
 
-📋 **Anforderungsphase** – noch kein lauffähiges Programm.
+📐 **Technische Planung** – Anforderungen fachlich freigegeben am 2026-11-15, Umsetzung noch nicht freigegeben.
 
 | Dokument | Inhalt |
 |---|---|
-| [Eingabe](docs/REQUIREMENTS_INPUT.md) | Idee und Mindestanforderungen |
-| [Analyse](docs/ANALYSIS_SUMMARY.md) | Funktionsbereiche, Abläufe, Risiken |
-| [Offene Fragen](docs/OPEN_QUESTIONS.md) | Rückfragen und Antworten |
-| [Anforderungsentwurf](docs/REQUIREMENTS_DRAFT.md) | Anforderungen mit Status |
+| [Anforderungen](docs/REQUIREMENTS.md) | fachlich freigegebene Anforderungen |
+| [Funktionales Design](docs/FUNCTIONAL_DESIGN.md) | alle Funktionen im Detail |
+| [Prozessabläufe](docs/PROCESS_FLOWS.md) | Abläufe als Diagramme |
+| [Architektur](docs/ARCHITECTURE.md) | Komponenten, Maßsystem, T02-Protokoll |
+| [Umsetzungsplan](docs/IMPLEMENTATION_PLAN.md) | Meilensteine M0–M8 |
+| [Analyse](docs/ANALYSIS_SUMMARY.md) · [Offene Fragen](docs/OPEN_QUESTIONS.md) · [Eingabe](docs/REQUIREMENTS_INPUT.md) · [Entwurf](docs/REQUIREMENTS_DRAFT.md) | Herleitung |
 
 ## Hintergrund
 

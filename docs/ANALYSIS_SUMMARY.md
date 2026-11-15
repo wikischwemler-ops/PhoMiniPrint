@@ -1,7 +1,7 @@
 # Analyse – PhoMiniPrint
 
 - **Grundlage:** [REQUIREMENTS_INPUT.md](REQUIREMENTS_INPUT.md), Stand 2026-11-15, vollständig gelesen
-- **Projektstatus:** ANALYSE → RÜCKFRAGEN
+- **Projektstatus:** FACHLICH FREIGEGEBEN (2026-11-15) → TECHNISCHE PLANUNG
 - **Weitere Ergebnisse:** [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md), [REQUIREMENTS_DRAFT.md](REQUIREMENTS_DRAFT.md)
 
 ---
@@ -72,6 +72,7 @@ Fehlende Informationen sind in [OPEN_QUESTIONS.md](OPEN_QUESTIONS.md) nach Theme
 | R-01 | Druckerauflösung weicht von 203 dpi ab | Ausdrucke falsch groß | Testdruck mit Messlineal vor der Umsetzung |
 | R-02 | Papiervorschub ungenau (Länge) | Länge weicht ab, Breite stimmt | Kalibrierung mit Korrekturfaktor |
 | R-03 | Bluetooth-Verbindung unter Windows unzuverlässig | Druck bricht ab | Verbindungsablauf von TiMini-Print als Vorbild, verständliche Fehlermeldungen |
+| R-08 | Akku, Papierstatus, Druckdichte und Signalstärke werden vom T02 bzw. von Windows evtl. nicht geliefert (FR-007, FR-020, FR-021) | Anzeige oder Regler ohne Wirkung | Im Prototyp gezielt prüfen; fehlende Werte dem Benutzer zur Entscheidung vorlegen |
 | R-07 | Portierung des T02-Protokolls von Python nach C# (Entscheidung C#/.NET, 2026-11-15) | Druck funktioniert anfangs nicht, Mehraufwand | Zuerst ein kleiner C#-Prototyp nur für Verbinden und Testbild drucken, Ergebnis mit TiMini-Print vergleichen, erst danach Oberfläche bauen |
 | R-04 | Farbige Emojis/Graustufen auf Thermodruck schlecht lesbar | Symbole unleserlich | Schwarz-Weiß-Schrift bzw. Dithering, Vorschau |
 | R-05 | Gewünschte Größe breiter als ca. 48 mm | Bild kann nicht exakt gedruckt werden | Warnung und Angebot: drehen (längs drucken) oder verkleinern |

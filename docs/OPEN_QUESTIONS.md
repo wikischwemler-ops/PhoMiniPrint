@@ -1,6 +1,6 @@
 # Offene Fragen – PhoMiniPrint
 
-- **Projektstatus:** RÜCKFRAGEN
+- **Projektstatus:** Rückfragen abgeschlossen, fachlich freigegeben am 2026-11-15. Unbeantwortete Punkte sind Planungsannahmen in IMPLEMENTATION_PLAN.md.
 - **Bezug:** [ANALYSIS_SUMMARY.md](ANALYSIS_SUMMARY.md), [REQUIREMENTS_DRAFT.md](REQUIREMENTS_DRAFT.md)
 
 Bitte die Antwort hinter **Antwort:** eintragen. Wo Optionen stehen, reicht der Buchstabe. Die Optionen sind **Vorschläge der KI**, sie gelten erst mit deiner Antwort.
@@ -64,10 +64,19 @@ Antwort: ja – Ränder links/rechts und oben/unten (aus Antwort Q-A2, 2026-11-1
 
 **Q-B1: Welche Dateiformate brauchst du?**
 a) PNG und JPG b) zusätzlich BMP, GIF c) zusätzlich PDF d) Bild aus der Zwischenablage einfügen (Strg+V)
-Antwort (mehrere möglich):
+Antwort: a) **PNG und JPG reichen** (2026-11-15). BMP/GIF, PDF und Zwischenablage werden nicht benötigt.
 
 **Q-B2: Wie soll ein Farb- oder Graustufenbild in Schwarz-Weiß umgewandelt werden?**
 a) automatisch b) wählbar: harte Schwelle oder Rasterung, mit Helligkeits- und Kontrastregler
+Antwort (2026-11-15): Eine **Stärke für Schwarz von 0–100 %**, einstellbar mit einem **Schieberegler**; die **Zahl soll sichtbar** sein.
+
+**Q-B2b: Was soll die „Stärke für Schwarz“ bewirken?**
+a) **Umwandlung:** ab welcher Helligkeit ein Bildpunkt schwarz wird (mehr % = mehr Fläche wird schwarz)
+b) **Druckdichte:** wie dunkel der Drucker druckt (Hitze des Druckkopfs), die Bildumwandlung bleibt automatisch
+c) beides als zwei getrennte Regler
+Antwort: c) beides als zwei getrennte Regler (2026-11-15)
+
+**Q-B2c: Welcher Wert ist beim ersten Start eingestellt, und soll er gespeichert werden?**
 Antwort:
 
 **Q-B3: Soll das Bild im Programm zuschneidbar oder drehbar sein?**
@@ -81,15 +90,19 @@ a) Sonderzeichen wie ° ² ³ € § ± ✓ ✗ ★ → ←
 b) Emojis wie 😀 ❤️ 👍 (werden schwarz-weiß gedruckt)
 c) Icons/Piktogramme wie Telefon, Haus, Warnzeichen
 d) Sonstiges:
-Antwort:
+Antwort (2026-11-15): „frei wählbar für dich“ – Auswahl an die KI übertragen. **KI-Festlegung im Auftrag des Benutzers** (jederzeit änderbar):
+- **a) Sonderzeichen: ja** – alle Unicode-Symbole, die die Windows-Schriften *Segoe UI* und *Segoe UI Symbol* darstellen (u. a. ° ² ³ € § ± × ÷ ✓ ✗ ★ ☆ ♥ → ← ↑ ↓ ☎ ⚠ ☀ ♪ ✂ ✉).
+- **b) Emojis: ja** – über *Segoe UI Emoji*, gedruckt als Schwarz-Weiß-Umriss bzw. gerastert.
+- **c) Icons/Piktogramme außerhalb von Unicode: später** (LATER), nicht Teil der ersten Version.
+- **Eingabe:** per Tastatur bzw. Einfügen *und* über eine Symbolauswahl im Programm mit den häufigsten Symbolen (beantwortet Q-C2 mit c).
 
 **Q-C2: Wie sollen Symbole eingefügt werden?**
 a) per Tastatur/Einfügen b) Symbolauswahl im Programm c) beides
-Antwort:
+Antwort: c) beides – KI-Festlegung im Auftrag des Benutzers (siehe Q-C1, 2026-11-15)
 
 **Q-C3: Was soll beim Text einstellbar sein?**
 a) Schriftgröße b) Schriftart c) fett/kursiv d) Ausrichtung links/mittig/rechts e) mehrere Zeilen
-Antwort (mehrere möglich):
+Antwort (2026-11-15): genau diese Punkte – **Schriftgröße, Schriftart, fett, Ausrichtung** (links/mittig/rechts). Kursiv und mehrere Zeilen nicht ausdrücklich genannt.
 
 **Q-C4: Soll Text auch in exakter Größe gedruckt werden, z. B. „Schrifthöhe 5 mm“ oder „Etikett 40 × 20 mm“?**
 a) ja b) nein
@@ -97,7 +110,7 @@ Antwort:
 
 **Q-C5: Sollen Bild und Text zusammen auf einem Ausdruck stehen können (z. B. Logo mit Beschriftung)?**
 a) ja b) nein, getrennt reicht
-Antwort:
+Antwort: a) ja – Bild und Text auf einem Ausdruck möglich (2026-11-15)
 
 ## D – Bedienung
 
@@ -131,11 +144,11 @@ Antwort:
 
 **Q-E2: Ist der T02 in Windows schon über Bluetooth gekoppelt?**
 a) ja b) nein
-Antwort:
+Antwort: a) ja (2026-11-15). Von der KI geprüft: Windows führt das Gerät als „T02“ (Status OK). Zusätzlich gibt es zwei Bluetooth-COM-Ports (COM9, COM10); welcher zum T02 gehört, wird beim Prototyp geprüft.
 
 **Q-E3: Soll das Programm den Akkustand bzw. den Papierstatus anzeigen, falls der Drucker das meldet?**
 a) ja b) nein
-Antwort:
+Antwort: a) ja (2026-11-15) – **Akkustand und Papierstatus (Papierstau / kein Papier)** sollen im Status angezeigt werden. Akku in % und zusätzlich als Balken (2026-11-15).
 
 ## F – Technik und Umsetzung
 
