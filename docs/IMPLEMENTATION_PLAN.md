@@ -44,7 +44,7 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 | M5 Kalibrierung | ✅ umgesetzt (PR `feat/kalibrierung`), 71 Unit-Tests; Dialog und Neustart am Bildschirm geprüft; Testseite am Gerät noch nicht gedruckt |
 | M6 Druckerstatus | ✅ umgesetzt (PR `feat/druckerstatus`), 82 Unit-Tests; am T02 ohne Druck geprüft: bereit, Akku 60 %, Papier ok, Verbindung 100 % |
 | M7 Installer | ✅ umgesetzt (PR `feat/installer`): Info-Fenster, .ico, Inno-Setup-Installer 52,6 MB self-contained; Installation für den Benutzer, Start aus dem Startmenü und Deinstallation geprüft. GitHub-Actions-Artefakt entfällt (A-02, Token ohne `workflow`) |
-| M8 | offen: Abnahme, Version 1.0.0 | Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
+| M8 Abnahme | ✅ ohne Druck abgenommen (Entscheidung des Benutzers), Protokoll `docs/ABNAHME.md`; Version 1.0.0. Abnahmestreifen mit neuer Rolle nachholen | Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
 
 ### Abweichungen vom Plan
 
