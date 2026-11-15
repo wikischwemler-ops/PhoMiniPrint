@@ -67,9 +67,17 @@ public static class Druckdienst
             return new Druckergebnis(false, $"Keine Verbindung zum {drucker.Name} ({port}). Ist der Drucker eingeschaltet?");
         }
 
+        Thread.Sleep(300);
+        return AufVerbindungDrucken(verbindung, daten, fortschritt);
+    }
+
+    /// <summary>Druckt über eine bereits geöffnete Verbindung: Papier prüfen, senden, auf „Druck fertig“ warten.</summary>
+    public static Druckergebnis AufVerbindungDrucken(SppVerbindung verbindung, Druckdaten daten, IProgress<Druckfortschritt>? fortschritt = null)
+    {
+        ArgumentNullException.ThrowIfNull(verbindung);
+        ArgumentNullException.ThrowIfNull(daten);
         try
         {
-            Thread.Sleep(300);
             var (meldungen, _) = verbindung.Abfragen(T02Befehle.AbfragePapier(), TimeSpan.FromMilliseconds(400));
             if (meldungen.Any(m => m.Kennung == KennungPapier && m.Wert == WertKeinPapier))
             {

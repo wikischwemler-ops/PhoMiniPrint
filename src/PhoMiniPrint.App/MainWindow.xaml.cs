@@ -27,6 +27,9 @@ public partial class MainWindow : Window
     private Einstellungen _einstellungen = Einstellungen.Standard;
     private bool _einstellungenZurueckgesetzt;
 
+    private readonly Druckerverbindung _drucker;
+    private Druckerstatus _druckerstatus = Druckerstatus.Unverbunden;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -46,6 +49,11 @@ public partial class MainWindow : Window
         DichteRegler.WertGeaendert += (_, _) => EinstellungenSpeichern();
         EinstellungenLaden();
 
+        _drucker = new Druckerverbindung(() => _einstellungen.LetzterDrucker);
+        _drucker.StatusGeaendert += (_, status) => Dispatcher.BeginInvoke(() => DruckerstatusAnzeigen(status));
+        _drucker.Verbunden += (_, fund) => Dispatcher.BeginInvoke(() => LetztenDruckerMerken(fund));
+        Closed += (_, _) => _drucker.Dispose();
+
         foreach (var feld in new[] { LaengeFeld, RandLinksFeld, RandRechtsFeld, RandObenFeld, RandUntenFeld })
         {
             FeldEinrichten(feld, EtikettUebernehmen);
@@ -58,7 +66,7 @@ public partial class MainWindow : Window
         EtikettFelderAnzeigen();
         ElementFelderAnzeigen();
         Aktualisieren();
-        Loaded += async (_, _) =>
+        Loaded += (_, _) =>
         {
             // „Öffnen mit“ / Startparameter: erstes Argument als Bild laden.
             var argumente = Environment.GetCommandLineArgs();
@@ -73,7 +81,7 @@ public partial class MainWindow : Window
                     "Einstellungen", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
-            await DruckerSuchenAsync();
+            _drucker.Starten();
         };
     }
 
@@ -230,7 +238,14 @@ public partial class MainWindow : Window
 
     private void Aktualisieren()
     {
-        var fehler = Layout.Pruefen(_etikett);
+        var fehler = Layout.Pruefen(_etikett).ToList();
+        if (!_druckerstatus.DruckErlaubt)
+        {
+            fehler.Add(_druckerstatus.Ueberhitzt
+                ? "Der Drucker ist überhitzt – bitte kurz abkühlen lassen."
+                : "Kein Papier oder Deckel offen – Drucken ist gesperrt.");
+        }
+
         FehlerText.Text = string.Join(Environment.NewLine, fehler);
         FehlerText.Visibility = fehler.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         DruckenKnopf.IsEnabled = fehler.Count == 0 && _etikett.Elemente.Count > 0 && !_druckt;
@@ -441,32 +456,61 @@ public partial class MainWindow : Window
 
     // ---------- Drucker ----------
 
-    private async void DruckerSuchen_Click(object sender, RoutedEventArgs e) => await DruckerSuchenAsync();
-
-    private async Task DruckerSuchenAsync()
+    private async void DruckerSuchen_Click(object sender, RoutedEventArgs e)
     {
-        StatusText.Text = "Drucker: wird gesucht …";
-        var letzter = _einstellungen.LetzterDrucker;
-        var drucker = await Task.Run(() => Druckdienst.DruckerSuchen(letzter));
-        if (drucker is null)
+        if (!_druckt)
         {
-            StatusSetzen("Drucker: kein gekoppelter T02 gefunden", "Fehler");
-        }
-        else
-        {
-            StatusSetzen($"Drucker: {drucker.Name} gekoppelt ({drucker.ComPort})", "Erfolg");
-            if (!string.Equals(drucker.Adresse, letzter, StringComparison.OrdinalIgnoreCase))
-            {
-                _einstellungen = _einstellungen with { LetzterDrucker = drucker.Adresse };
-                EinstellungenSpeichern();
-            }
+            await _drucker.NeuVerbindenAsync();
         }
     }
 
+    private void LetztenDruckerMerken(Printer.T02Fundstelle fund)
+    {
+        if (!string.Equals(fund.Adresse, _einstellungen.LetzterDrucker, StringComparison.OrdinalIgnoreCase))
+        {
+            _einstellungen = _einstellungen with { LetzterDrucker = fund.Adresse };
+            EinstellungenSpeichern();
+        }
+    }
+
+    /// <summary>Statusleiste: Verbindung, Akku % + Balken, Papier, Verbindungsqualität % + Balken (F-02).</summary>
+    private void DruckerstatusAnzeigen(Druckerstatus status)
+    {
+        _druckerstatus = status;
+        var name = status.Name ?? "T02";
+        var port = status.ComPort is null ? string.Empty : $" ({status.ComPort})";
+        (ZustandText.Text, var farbe) = status.Zustand switch
+        {
+            Verbindungszustand.Bereit => ($"{name} bereit{port}", "Erfolg"),
+            Verbindungszustand.Druckt => ($"{name} druckt{port}", "Akzent"),
+            Verbindungszustand.Verbindet => ("Verbinde mit dem Drucker …", "TextGedimmt"),
+            _ => (status.Name is null ? "Kein gekoppelter T02 gefunden" : $"{name} nicht verbunden – eingeschaltet?", "Fehler"),
+        };
+        DruckerPunkt.Fill = (Brush)FindResource(farbe);
+
+        var verbunden = status.Zustand is Verbindungszustand.Bereit or Verbindungszustand.Druckt;
+        Statuswerte.Visibility = verbunden ? Visibility.Visible : Visibility.Collapsed;
+        AkkuBalken.Prozent = status.AkkuProzent;
+        AkkuText.Text = status.AkkuProzent is { } akku ? $"{akku} %" : "–";
+        AkkuText.Foreground = status.AkkuProzent is < 20 ? (Brush)FindResource("Akzent") : (Brush)FindResource("Text");
+        (PapierText.Text, var papierFarbe) = (status.Papier, status.Ueberhitzt) switch
+        {
+            (_, true) => ("Drucker überhitzt", "Fehler"),
+            (Papierzustand.KeinPapier, _) => ("Kein Papier oder Deckel offen", "Fehler"),
+            (Papierzustand.Ok, _) => ("Papier ok", "Text"),
+            _ => ("–", "TextGedimmt"),
+        };
+        PapierText.Foreground = (Brush)FindResource(papierFarbe);
+        QualitaetBalken.Prozent = status.VerbindungsqualitaetProzent;
+        QualitaetText.Text = status.VerbindungsqualitaetProzent is { } q ? $"{q} %" : "–";
+        Aktualisieren();
+    }
+
+    /// <summary>Kurze Meldung rechts neben dem Druckerstatus.</summary>
     private void StatusSetzen(string text, string farbe)
     {
         StatusText.Text = text;
-        DruckerPunkt.Fill = (Brush)FindResource(farbe);
+        StatusText.Foreground = (Brush)FindResource(farbe == "Erfolg" ? "TextGedimmt" : farbe);
     }
 
     private async void Drucken_Click(object sender, RoutedEventArgs e)
@@ -500,13 +544,12 @@ public partial class MainWindow : Window
         IllustrationText.Text = $"{Zahl(laengeMm)} mm · Druckdichte Stufe {Printer.T02Befehle.DichtestufeAusProzent(DichteRegler.Wert)}";
 
         var fortschritt = new Progress<Druckfortschritt>(FortschrittAnzeigen);
-        var letzter = _einstellungen.LetzterDrucker;
-        var ergebnis = await Task.Run(() => Druckdienst.Drucken(daten, fortschritt, letzter));
+        var ergebnis = await _drucker.DruckenAsync(daten, fortschritt);
 
         Animation.Beenden(ergebnis.Erfolgreich);
         IllustrationTitel.Text = ergebnis.Erfolgreich ? "Fertig" : "Nicht gedruckt";
         IllustrationText.Text = ergebnis.Meldung;
-        StatusSetzen($"Drucker: {ergebnis.Meldung}", ergebnis.Erfolgreich ? "Erfolg" : "Fehler");
+        StatusSetzen(ergebnis.Meldung, ergebnis.Erfolgreich ? "Erfolg" : "Fehler");
 
         await Task.Delay(ergebnis.Erfolgreich ? 1500 : 3500);
         _druckt = false;
