@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="PhoMiniPrint-Icon">
+  <rect width="256" height="256" rx="52" fill="#1b1b1b"/>
+  <g fill="none" stroke="#F26B1D" stroke-width="14" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Papierstreifen -->
+    <path d="M86 132 V48 H170 V132"/>
+    <!-- Druckergehäuse -->
+    <rect x="44" y="120" width="168" height="92" rx="26"/>
+  </g>
+  <!-- Maßlinie auf dem Papier -->
+  <g stroke="#F26B1D" stroke-width="8" stroke-linecap="round">
+    <line x1="106" y1="78" x2="150" y2="78"/>
+    <line x1="106" y1="66" x2="106" y2="90"/>
+    <line x1="150" y1="66" x2="150" y2="90"/>
+  </g>
+  <!-- Druckschlitz und Taste -->
+  <line x1="78" y1="148" x2="178" y2="148" stroke="#F26B1D" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="176" cy="182" r="10" fill="#F26B1D"/>
+</svg>
