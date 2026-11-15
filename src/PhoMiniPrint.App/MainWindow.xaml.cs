@@ -454,6 +454,8 @@ public partial class MainWindow : Window
 
     private void Beenden_Click(object sender, RoutedEventArgs e) => Close();
 
+    private void Info_Click(object sender, RoutedEventArgs e) => new InfoFenster { Owner = this }.ShowDialog();
+
     // ---------- Drucker ----------
 
     private async void DruckerSuchen_Click(object sender, RoutedEventArgs e)
