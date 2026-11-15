@@ -25,7 +25,7 @@
 
 ## Stand
 
-🛠️ **Umsetzung** – freigegeben am 2026-11-15. M0 (Grundgerüst), M1 (Prototyp am T02) und M2 (Kern: Maße, Rendern, Druckauftrag) fertig – exakter Druck 40 × 40 mm am Gerät bestätigt.
+🛠️ **Umsetzung** – freigegeben am 2026-11-15. M0 (Grundgerüst), M1 (Prototyp am T02) M2 (Kern: Maße, Rendern, Druckauftrag) und M3 (Oberfläche mit Bandansicht, Reglern und Druckanimation) fertig – exakter Druck 40 × 40 mm am Gerät bestätigt.
 
 ```bash
 dotnet build PhoMiniPrint.slnx

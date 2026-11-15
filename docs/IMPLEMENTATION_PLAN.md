@@ -39,7 +39,8 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 | M0 Grundgerüst | ✅ umgesetzt (PR `chore/grundgeruest`), CI-Workflow folgt (A-02) |
 | M1 Prototyp T02 | ✅ umgesetzt, Ergebnis in [PROTOTYP_ERGEBNIS.md](PROTOTYP_ERGEBNIS.md) – Entscheidungen E-1 bis E-3 getroffen (A, A, A) |
 | M2 Kern | ✅ umgesetzt (PR `feat/kern-rendern`), ohne Papier geprüft – 38 Unit-Tests |
-| M3–M8 | offen; M3 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
+| M3 Bandansicht | ✅ umgesetzt (PR `feat/bandansicht`), Oberfläche am Bildschirm geprüft, 48 Unit-Tests; Druck und Animation noch nicht am Gerät (Abnahmedruck nur nach Zustimmung) |
+| M4–M8 | offen; M4 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
 
 ### Abweichungen vom Plan
 
@@ -94,6 +95,7 @@ Kleines Konsolenprogramm `tools/T02Probe`, **ohne Oberfläche**. Klärt alle off
 - **FR-022 Druckanimation:** Drucker-Symbol mit animierten Funkwellen vom PC zum Drucker während der Übertragung; Papierstreifen kommt passend zum Fortschritt heraus (WPF-Animation, gesteuert über den Sendefortschritt).
 - **Wunsch des Benutzers (2026-11-15, „falls freier Platz ist“):** Drucker-Illustration aus `docs/bilder/drucker.svg` als Startansicht der leeren Bandansicht mit Hinweis „Bild oder Text einfügen“; Programm-Icon aus `docs/bilder/icon.svg` in Titelleiste und Taskleiste.
 - **Fertig, wenn:** F-03, F-04, F-05, F-07, F-08 ihre Akzeptanzkriterien erfüllen.
+- **Umgesetzt (2026-11-15):** Bandansicht mit mm-Linealen, schraffierten nicht bedruckbaren Streifen, Rändern und Schwarz-Weiß-Vorschau aus demselben Raster wie der Druck; Anfasser an den Ecken, Pfeiltasten (1 mm, mit Umschalt 1/8 mm), Entf; Breite/Höhe exakt per Eingabe; Ziehen einer Datei in die Ansicht; Bild als Startparameter („Öffnen mit“); EXIF-Ausrichtung von Fotos. Drucken sucht den T02, prüft Papier, sendet und wartet auf „Druck fertig“. Ränder und Regler werden erst in M5 gespeichert.
 
 ### M4 – Text mit Symbolen · Branch `feat/text-symbole`
 - Textdialog mit Schriftart, Größe, fett, Ausrichtung.
