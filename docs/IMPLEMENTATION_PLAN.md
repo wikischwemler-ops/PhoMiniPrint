@@ -37,8 +37,8 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 | Meilenstein | Stand |
 |---|---|
 | M0 Grundgerüst | ✅ umgesetzt (PR `chore/grundgeruest`), CI-Workflow folgt (A-02) |
-| M1 Prototyp T02 | ⏳ als Nächstes |
-| M2–M8 | offen |
+| M1 Prototyp T02 | ✅ umgesetzt, Ergebnis in [PROTOTYP_ERGEBNIS.md](PROTOTYP_ERGEBNIS.md) – Entscheidungen E-1 bis E-3 getroffen (A, A, A) |
+| M2–M8 | offen; M2 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
 
 ### Abweichungen vom Plan
 
@@ -88,6 +88,9 @@ Kleines Konsolenprogramm `tools/T02Probe`, **ohne Oberfläche**. Klärt alle off
 - Felder Länge und Ränder (einzeln), Warnung bei Überschreitung.
 - Regler Stärke für Schwarz und Druckdichte mit Zahl.
 - Drucken-Schaltfläche.
+- **Regler-Gestaltung (Wunsch des Benutzers, 2026-11-15):** dicke Spur mit oranger Füllung bis zum Wert, runder Griff, Skala 0/25/50/75/100, großer Zahlenwert; „Stärke für Schwarz“ mit Grauverlauf-Vorschau, „Druckdichte“ mit Anzeige der aktiven Stufe 1–4.
+- **FR-022 Druckanimation:** Drucker-Symbol mit animierten Funkwellen vom PC zum Drucker während der Übertragung; Papierstreifen kommt passend zum Fortschritt heraus (WPF-Animation, gesteuert über den Sendefortschritt).
+- **Wunsch des Benutzers (2026-11-15, „falls freier Platz ist“):** Drucker-Illustration aus `docs/bilder/drucker.svg` als Startansicht der leeren Bandansicht mit Hinweis „Bild oder Text einfügen“; Programm-Icon aus `docs/bilder/icon.svg` in Titelleiste und Taskleiste.
 - **Fertig, wenn:** F-03, F-04, F-05, F-07, F-08 ihre Akzeptanzkriterien erfüllen.
 
 ### M4 – Text mit Symbolen · Branch `feat/text-symbole`
@@ -109,6 +112,7 @@ Kleines Konsolenprogramm `tools/T02Probe`, **ohne Oberfläche**. Klärt alle off
 
 ### M7 – Versionsinfo und Installer · Branch `feat/installer`
 - Info-Fenster und Version in der Titelleiste.
+- Info-Fenster mit Programm-Icon (Wunsch des Benutzers, 2026-11-15); Icon auch als `.ico` für EXE, Startmenü und Installer.
 - Inno-Setup-Skript, self-contained-Build für win-x64.
 - `PhoMiniPrint-Setup-<Version>.exe` als Artefakt in GitHub Actions **[Vorschlag]**.
 - **Fertig, wenn:** Installation auf Windows 11 ohne vorinstalliertes .NET funktioniert; Startmenü-Eintrag vorhanden.
@@ -147,6 +151,7 @@ flowchart LR
 | FR-012 | M5 |
 | FR-018 | M0, M7 |
 | FR-020, FR-021 | M1, M6 |
+| FR-022 | M3 |
 | NFR-001, NFR-004 | alle |
 | NFR-002, NFR-006, NFR-007 | M0, M7 |
 | NFR-003 | M1, M5, M8 |
