@@ -112,6 +112,16 @@ Am T02 gemessene Zuordnung (weicht teilweise von TiMini-Print ab):
 
 **Empfehlung:** C, weil ein kurzer Test auf einem Streifen klären kann, ob der T02 feinere Abstufungen kann.
 
+## 4a. Entscheidungen des Benutzers (2026-11-15)
+
+| Nr. | Entscheidung |
+|---|---|
+| E-1 | **A** – Verbindungsqualität in % mit Balken statt Funksignalstärke |
+| E-2 | **A** – „kein Papier oder Deckel offen“; Hinweis „Papierstau?“, wenn „Druck fertig“ ausbleibt |
+| E-3 | **A** – Regler mit 4 Stufen wie geplant; Feintest stärkerer Werte erst mit neuer Rolle |
+
+Randbedingung: Papier ist knapp (nur eine fast leere Rolle). Druck nur noch zur Abnahme, höchstens ein kurzer Streifen je Meilenstein und nur nach Zustimmung des Benutzers.
+
 ## 5. Übernahme in den Code
 
 | Befund | Umsetzung |

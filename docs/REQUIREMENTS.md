@@ -50,7 +50,7 @@
 | FR-018 | Versionsinformation in der Software | USER | MUST | CONFIRMED (Freigabe) |
 | FR-019 | Bandansicht, automatisch max. einpassen, Anpassen mit Maus | USER | MUST | CONFIRMED |
 | FR-020 | Akkustand und Papierstatus (Papierstau, kein Papier) im Status | USER | MUST | CONFIRMED |
-| FR-021 | Bluetooth-Signalstärke im Status (% und Balken) | USER | MUST | CONFIRMED |
+| FR-021 | Verbindungsqualität im Status (% und Balken), statt Funksignal – Änderung E-1 | USER | MUST | CONFIRMED |
 | FR-022 | Drucker-Symbol mit Animation: Funkwellen bei Übertragung, Papier kommt heraus | USER | SHOULD | CONFIRMED (Nachtrag) |
 | NFR-001 🔒 | Programm auf Deutsch | USER | MUST | CONFIRMED |
 | NFR-002 | Läuft unter Windows 11 | USER | MUST | CONFIRMED |
@@ -90,6 +90,7 @@
 - **Abhängigkeiten:** FR-002
 
 ### FR-020 Akkustand und Papierstatus im Status
+- **Änderung (2026-11-15, Entscheidung E-2 des Benutzers):** Der T02 meldet nur „kein Papier“ (M1). Anzeige „kein Papier oder Deckel offen“; bleibt nach einem Druck die Meldung „Druck fertig“ aus, erscheint der Hinweis „Druck nicht abgeschlossen – Papierstau?“. Der Akkustand wird geglättet, weil er nach dem Drucken kurzzeitig einbricht.
 - **Beschreibung:** Im Druckerstatus werden zusätzlich der **Akkustand** des T02 (in % und als Balken) und der **Papierstatus** angezeigt, insbesondere **Papierstau** und **kein Papier**. Bei einem Papierproblem wird der Druck nicht gestartet bzw. mit einer deutschen Meldung abgebrochen.
 - **Herkunft:** USER (Q-E3, 2026-11-15)
 - **Priorität / Status:** MUST / CONFIRMED
@@ -100,6 +101,7 @@
 - **Abhängigkeiten:** FR-003, INT-001
 
 ### FR-021 Bluetooth-Signalstärke im Status
+- **Änderung (2026-11-15, Entscheidung E-1 des Benutzers):** Windows liefert für den T02 keine echte Signalstärke (M1). Angezeigt wird stattdessen eine **Verbindungsqualität** in % und als Balken, berechnet aus Antwortzeit und Fehlerquote der Statusabfragen. Die Akzeptanzkriterien gelten sinngemäß für die Verbindungsqualität.
 - **Beschreibung:** Im Druckerstatus wird die **Signalstärke der Bluetooth-Verbindung** zum T02 angezeigt, ähnlich wie der Akkustand: **als Zahl in % und als Balkenanzeige**.
 - **Herkunft:** USER (2026-11-15)
 - **Priorität / Status:** MUST / CONFIRMED
@@ -142,6 +144,7 @@
 - **Abhängigkeiten:** FR-006, BR-001, BR-002
 
 ### FR-007 Umwandlung in Schwarz-Weiß
+- **Hinweis (2026-11-15, Entscheidung E-3 des Benutzers):** Regler Druckdichte bleibt mit 4 Stufen. Im M1-Test war nur Stufe 1 sichtbar heller; ein Feintest stärkerer Werte folgt mit einer neuen Rolle.
 - **Beschreibung:** Farb- und Graustufenbilder werden für den Thermodruck in reines Schwarz-Weiß umgewandelt. Es gibt **zwei getrennte Schieberegler**, jeweils **0–100 %** mit **sichtbarem Zahlenwert**:
   1. **Stärke für Schwarz (Umwandlung):** ab welcher Helligkeit ein Bildpunkt schwarz wird; mehr % = mehr Fläche wird schwarz.
   2. **Druckdichte:** wie dunkel der Drucker druckt (Hitze des Druckkopfs).

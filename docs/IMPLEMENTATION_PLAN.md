@@ -37,8 +37,8 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 | Meilenstein | Stand |
 |---|---|
 | M0 Grundgerüst | ✅ umgesetzt (PR `chore/grundgeruest`), CI-Workflow folgt (A-02) |
-| M1 Prototyp T02 | ✅ umgesetzt, Ergebnis in [PROTOTYP_ERGEBNIS.md](PROTOTYP_ERGEBNIS.md) – Entscheidungen E-1 bis E-3 offen |
-| M2–M8 | offen, M2 startet nach den Entscheidungen E-1 bis E-3 |
+| M1 Prototyp T02 | ✅ umgesetzt, Ergebnis in [PROTOTYP_ERGEBNIS.md](PROTOTYP_ERGEBNIS.md) – Entscheidungen E-1 bis E-3 getroffen (A, A, A) |
+| M2–M8 | offen; M2 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
 
 ### Abweichungen vom Plan
 
