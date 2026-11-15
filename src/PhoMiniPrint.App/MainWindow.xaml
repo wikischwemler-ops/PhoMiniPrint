@@ -40,6 +40,9 @@
                 <MenuItem Header="_Kalibrieren …" Click="Kalibrieren_Click" />
                 <MenuItem Header="Kalibrierung _zurücksetzen" Click="KalibrierungZuruecksetzen_Click" />
             </MenuItem>
+            <MenuItem Header="_Hilfe">
+                <MenuItem Header="Über _PhoMiniPrint …" Click="Info_Click" />
+            </MenuItem>
         </Menu>
 
         <!-- Statusleiste -->

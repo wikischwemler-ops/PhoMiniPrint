@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <!-- Programm-Icon: einzige Quelle, auch für PhoMiniPrint.ico (tools/icon_erzeugen.ps1) -->
+            <ResourceDictionary Source="Ressourcen/ProgrammIcon.xaml" />
+        </ResourceDictionary.MergedDictionaries>
         <!-- Farben (wie docs/bilder/drucker.svg) -->
         <Color x:Key="AkzentFarbe">#F26B1D</Color>
         <SolidColorBrush x:Key="Akzent" Color="{StaticResource AkzentFarbe}" />
@@ -16,42 +21,6 @@
         <SolidColorBrush x:Key="Fehler" Color="#FF6B6B" />
         <SolidColorBrush x:Key="Erfolg" Color="#3ECF8E" />
 
-        <!-- Programm-Icon (docs/bilder/icon.svg) -->
-        <DrawingImage x:Key="ProgrammIcon">
-            <DrawingImage.Drawing>
-                <DrawingGroup>
-                    <GeometryDrawing Brush="#1B1B1B" Geometry="M52,0 H204 A52,52 0 0 1 256,52 V204 A52,52 0 0 1 204,256 H52 A52,52 0 0 1 0,204 V52 A52,52 0 0 1 52,0 Z" />
-                    <GeometryDrawing Geometry="M86,132 V48 H170 V132">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#F26B1D" Thickness="14" LineJoin="Round" StartLineCap="Round" EndLineCap="Round" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
-                    <GeometryDrawing>
-                        <GeometryDrawing.Geometry>
-                            <RectangleGeometry Rect="44,120,168,92" RadiusX="26" RadiusY="26" />
-                        </GeometryDrawing.Geometry>
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#F26B1D" Thickness="14" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
-                    <GeometryDrawing Geometry="M106,78 H150 M106,66 V90 M150,66 V90">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#F26B1D" Thickness="8" StartLineCap="Round" EndLineCap="Round" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
-                    <GeometryDrawing Geometry="M78,148 H178">
-                        <GeometryDrawing.Pen>
-                            <Pen Brush="#F26B1D" Thickness="10" StartLineCap="Round" EndLineCap="Round" />
-                        </GeometryDrawing.Pen>
-                    </GeometryDrawing>
-                    <GeometryDrawing Brush="#F26B1D">
-                        <GeometryDrawing.Geometry>
-                            <EllipseGeometry Center="176,182" RadiusX="10" RadiusY="10" />
-                        </GeometryDrawing.Geometry>
-                    </GeometryDrawing>
-                </DrawingGroup>
-            </DrawingImage.Drawing>
-        </DrawingImage>
 
         <!-- Grundstile -->
         <Style TargetType="TextBlock">
@@ -140,5 +109,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

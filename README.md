@@ -25,7 +25,7 @@
 
 ## Stand
 
-🛠️ **Umsetzung** – freigegeben am 2026-11-15. M0 (Grundgerüst), M1 (Prototyp am T02), M2 (Kern: Maße, Rendern, Druckauftrag), M3 (Oberfläche mit Bandansicht, Reglern und Druckanimation) und M4 (Text mit Symbolen) fertig – exakter Druck 40 × 40 mm am Gerät bestätigt.
+🛠️ **Umsetzung** – freigegeben am 2026-11-15. M0 (Grundgerüst), M1 (Prototyp am T02), M2 (Kern: Maße, Rendern, Druckauftrag), M3 (Oberfläche mit Bandansicht, Reglern und Druckanimation), M4 (Text mit Symbolen), M5 (Kalibrierung und Einstellungen), M6 (Druckerstatus) und M7 (Info-Fenster und Installer) fertig – exakter Druck 40 × 40 mm am Gerät bestätigt.
 
 ```bash
 dotnet build PhoMiniPrint.slnx
@@ -40,6 +40,16 @@ dotnet test PhoMiniPrint.slnx
 | [Architektur](docs/ARCHITECTURE.md) | Komponenten, Maßsystem, T02-Protokoll |
 | [Umsetzungsplan](docs/IMPLEMENTATION_PLAN.md) | Meilensteine M0–M8 |
 | [Analyse](docs/ANALYSIS_SUMMARY.md) · [Offene Fragen](docs/OPEN_QUESTIONS.md) · [Eingabe](docs/REQUIREMENTS_INPUT.md) · [Entwurf](docs/REQUIREMENTS_DRAFT.md) | Herleitung |
+
+## Installer bauen
+
+Voraussetzungen: .NET 10 SDK und [Inno Setup 6](https://jrsoftware.org/isinfo.php).
+
+```bash
+powershell -ExecutionPolicy Bypass -File tools/installer_bauen.ps1
+```
+
+Ergebnis: `artefakte/PhoMiniPrint-Setup-<Version>.exe`, mit eingebauter .NET-Laufzeit. Die Versionsnummer steht nur in `Directory.Build.props`. Das Programm-Icon wird mit `tools/icon_erzeugen.ps1` aus `src/PhoMiniPrint.App/Ressourcen/ProgrammIcon.xaml` erzeugt.
 
 ## Hintergrund
 

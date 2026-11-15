@@ -6,7 +6,18 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>PhoMiniPrint.App</RootNamespace>
     <AssemblyName>PhoMiniPrint</AssemblyName>
+    <!-- Icon für EXE, Startmenü und Installer (erzeugt mit tools/icon_erzeugen.ps1). -->
+    <ApplicationIcon>PhoMiniPrint.ico</ApplicationIcon>
+    <Description>PhoMiniPrint – exakt drucken auf dem Phomemo T02</Description>
+    <!-- Nur deutsche Sprachressourcen des Frameworks ausliefern (NFR-001), spart Platz im Installer. -->
+    <SatelliteResourceLanguages>de</SatelliteResourceLanguages>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Build-Datum für das Info-Fenster (F-11). -->
+    <AssemblyMetadata Include="BuildDatum" Value="$([System.DateTime]::Now.ToString('yyyy-MM-dd'))" />
+    <Content Include="..\..\NOTICE" Link="NOTICE.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PhoMiniPrint.Core\PhoMiniPrint.Core.csproj" />
