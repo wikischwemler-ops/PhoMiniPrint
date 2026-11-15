@@ -40,7 +40,8 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 | M1 Prototyp T02 | ✅ umgesetzt, Ergebnis in [PROTOTYP_ERGEBNIS.md](PROTOTYP_ERGEBNIS.md) – Entscheidungen E-1 bis E-3 getroffen (A, A, A) |
 | M2 Kern | ✅ umgesetzt (PR `feat/kern-rendern`), ohne Papier geprüft – 38 Unit-Tests |
 | M3 Bandansicht | ✅ umgesetzt (PR `feat/bandansicht`), Oberfläche am Bildschirm geprüft, 48 Unit-Tests; Druck und Animation noch nicht am Gerät (Abnahmedruck nur nach Zustimmung) |
-| M4–M8 | offen; M4 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
+| M4 Text | ✅ umgesetzt (PR `feat/text-symbole`), am Bildschirm geprüft, 56 Unit-Tests; Abnahmetext ohne Papier geprüft (jedes Zeichen gerastert) |
+| M5–M8 | offen; M5 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
 
 ### Abweichungen vom Plan
 
@@ -102,6 +103,7 @@ Kleines Konsolenprogramm `tools/T02Probe`, **ohne Oberfläche**. Klärt alle off
 - Symbolauswahl, Einfügen an der Cursorposition.
 - Text und Bild gemeinsam auf einem Etikett.
 - **Fertig, wenn:** Testtext `° ² € § ± ✓ ✗ ★ ♥ → ☎ ⚠ 😀 👍` vollständig gedruckt wird.
+- **Umgesetzt (2026-11-15):** Textdialog (Strg+T, Doppelklick zum Bearbeiten) mit Schriftart, Größe in pt und Zeichenhöhe in mm, fett, Ausrichtung, mehrzeilig; Symbolauswahl mit 52 Zeichen und Emojis, Einfügen an der Schreibmarke; Warnung „Das Zeichen ‚…‘ kann nicht gedruckt werden.“ (Prüfung gegen gewählte Schrift und Windows-Ersatzschriften). Text wird gleichmäßig in seinen Kasten skaliert: Ecken ziehen ändert die Schriftgröße, Drehen behält sie. Zu langer Text wird beim Einfügen auf den Druckbereich verkleinert. „Maximal einpassen“ gilt jetzt auch für Text.
 
 ### M5 – Kalibrierung und Einstellungen · Branch `feat/kalibrierung`
 - Menü „Kalibrierung“: Testseite, Messwerte eingeben, Faktoren speichern, zurücksetzen.
