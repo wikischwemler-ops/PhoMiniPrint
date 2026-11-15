@@ -25,7 +25,7 @@
 
 ## Stand
 
-🛠️ **Umsetzung** – freigegeben am 2026-11-15. Meilenstein M0 (Grundgerüst) fertig, als Nächstes M1 (Prototyp am T02).
+🛠️ **Umsetzung** – freigegeben am 2026-11-15. M0 (Grundgerüst) und M1 (Prototyp am T02) fertig – exakter Druck 40 × 40 mm am Gerät bestätigt.
 
 ```bash
 dotnet build PhoMiniPrint.slnx

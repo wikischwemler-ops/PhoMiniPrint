@@ -93,7 +93,7 @@ Regel: `Core` und `Printer` kennen die Oberfläche nicht. So sind sie ohne Fenst
 |---|---|---|
 | Auflösung | 203 dpi = **8 Punkte/mm** | TiMini-Print-Profil `phomemo_t02` (`dev_dpi: 203`, `one_length: 8`) |
 | Druckbreite | **384 Punkte = 48 mm** | TiMini-Print-Rezept `t02` (`content_width: 384`) |
-| Bandhöhe | 52 mm | Benutzer (Q-A2) |
+| Bandhöhe | **50 mm** (gemessen in M1; zuvor 52 mm angenommen) | Benutzer (Q-A2, M1) |
 | Länge | unbegrenzt (Rolle) | – |
 
 Umrechnung:
@@ -110,7 +110,7 @@ Punkte_Höhe  = runden(mm_Höhe  × 8 × Faktor_Höhe)
 
 ## 4. Druckprotokoll T02 (Referenz TiMini-Print, Apache-2.0)
 
-Kurzfassung aus der Analyse von TiMini-Print (Familie *Phomemo ESC*, Variante `t02`). **Nicht am Gerät bestätigt**; Meilenstein M1 prüft jede Zeile.
+Kurzfassung aus der Analyse von TiMini-Print (Familie *Phomemo ESC*, Variante `t02`). **Am Gerät geprüft in M1** – Abweichungen siehe [PROTOTYP_ERGEBNIS.md](PROTOTYP_ERGEBNIS.md) (u. a. Akku = `1F 11 08`, Meldung „Druck fertig“ `1A 0F 0C`, 7 mm Nachlauf).
 
 | Zweck | Befehl (hex) | Hinweis |
 |---|---|---|

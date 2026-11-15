@@ -7,4 +7,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/PhoMiniPrint.Tests/PhoMiniPrint.Tests.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/T02Probe/T02Probe.csproj" />
+  </Folder>
 </Solution>

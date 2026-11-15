@@ -51,6 +51,7 @@
 | FR-019 | Bandansicht, automatisch max. einpassen, Anpassen mit Maus | USER | MUST | CONFIRMED |
 | FR-020 | Akkustand und Papierstatus (Papierstau, kein Papier) im Status | USER | MUST | CONFIRMED |
 | FR-021 | Bluetooth-Signalstärke im Status (% und Balken) | USER | MUST | CONFIRMED |
+| FR-022 | Drucker-Symbol mit Animation: Funkwellen bei Übertragung, Papier kommt heraus | USER | SHOULD | CONFIRMED (Nachtrag) |
 | NFR-001 🔒 | Programm auf Deutsch | USER | MUST | CONFIRMED |
 | NFR-002 | Läuft unter Windows 11 | USER | MUST | CONFIRMED |
 | NFR-003 | Maßgenauigkeit ±1 mm | USER | MUST | CONFIRMED |
@@ -250,6 +251,17 @@
 - **Beschreibung:** Bild mit Strg+V einfügen.
 - **Herkunft:** AI PROPOSAL
 - **Priorität / Status:** COULD / REJECTED (Q-B1, 2026-11-15: PNG und JPG reichen)
+
+### FR-022 Drucker-Symbol mit Druckanimation
+- **Beschreibung:** Die Oberfläche zeigt das Drucker-Symbol aus `docs/bilder/drucker.svg`. Während eines Drucks kommt dort ein Papierstreifen **animiert** aus dem Drucker, passend zum Druckfortschritt; die Kontrollleuchte blinkt. Solange **Daten übertragen** werden, laufen **Funkwellen** animiert vom PC zum Drucker (Benutzer, 2026-11-15). Nach dem Druck bleibt der Streifen kurz sichtbar und verschwindet.
+- **Herkunft:** USER (2026-11-15, Nachtrag nach der fachlichen Freigabe, vom Benutzer selbst angefordert)
+- **Priorität / Status:** SHOULD / CONFIRMED (Nachtrag)
+- **Akzeptanzkriterien:**
+  - Während des Drucks bewegt sich der Papierstreifen sichtbar und erreicht bei 100 % die volle Länge.
+  - Bei Abbruch (kein Papier, Verbindungsfehler) stoppt die Animation und die Meldung erscheint.
+  - Während der Datenübertragung bewegen sich die Funkwellen sichtbar vom PC zum Drucker und stoppen, wenn die Übertragung endet.
+  - Die Animation verzögert den Druck nicht.
+- **Abhängigkeiten:** F-08 Drucken (Fortschritt), FR-003
 
 ---
 
