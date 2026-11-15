@@ -80,12 +80,14 @@ flowchart TB
 | Projekt | Zuständigkeit | Hängt ab von |
 |---|---|---|
 | `PhoMiniPrint.App` | WPF-Oberfläche, ViewModels, Dialoge, deutsche Texte | Core, Printer |
-| `PhoMiniPrint.Core` | Etikett-Modell, Maßrechnung, Rendern, Schwarz-Weiß, Einstellungen | – (nur WPF-Grafik) |
+| `PhoMiniPrint.Core` | Etikett-Modell, Maßrechnung, Rendern, Schwarz-Weiß, Einstellungen | Printer (Rasterbild, T02-Eckdaten; Abweichung A-03) |
 | `PhoMiniPrint.Printer` | T02-Protokoll, Transport, Status, Druckersuche, Signalstärke | – |
 | `PhoMiniPrint.Tests` | Unit-Tests für Core und Printer (ohne echten Drucker) | Core, Printer |
 | `tools/T02Probe` | Konsolen-Prototyp für Meilenstein M1 | Printer |
 
 Regel: `Core` und `Printer` kennen die Oberfläche nicht. So sind sie ohne Fenster testbar.
+
+**Ausrichtung des Rasters (in M1 gemessen, in M2 umgesetzt):** Zeile 0 = Anfang des Etiketts; Spalte 383 = obere Bandkante der Bandansicht. Liegt der Anfang des Streifens links, ist der Ausdruck seitenrichtig lesbar.
 
 ## 3. Maßsystem (Kern für „exakte Größe“)
 

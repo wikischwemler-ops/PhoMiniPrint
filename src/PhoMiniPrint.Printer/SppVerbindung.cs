@@ -77,6 +77,45 @@ public sealed class SppVerbindung : IDisposable
         Thread.Sleep(druckzeit);
     }
 
+    /// <summary>Kennung der Meldung „Druck fertig“ (1A 0F 0C), am T02 gemessen in M1.</summary>
+    public const byte KennungDruckFertig = 0x0F;
+
+    /// <summary>
+    /// Wartet auf die Meldung „Druck fertig“, die nach dem Senden eingeht (FR-020, E-2).
+    /// Liefert false, wenn sie innerhalb der Frist ausbleibt – Hinweis „Papierstau?“.
+    /// </summary>
+    /// <param name="abMeldung">Anzahl der Meldungen vor dem Senden; nur spätere zählen.</param>
+    public bool AufFertigmeldungWarten(int abMeldung, TimeSpan frist)
+    {
+        var ende = DateTime.UtcNow + frist;
+        while (DateTime.UtcNow < ende)
+        {
+            lock (_sperre)
+            {
+                if (Meldungen.Skip(abMeldung).Any(m => m.Kennung == KennungDruckFertig))
+                {
+                    return true;
+                }
+            }
+
+            Thread.Sleep(100);
+        }
+
+        return false;
+    }
+
+    /// <summary>Anzahl der bisher empfangenen Meldungen (für <see cref="AufFertigmeldungWarten"/>).</summary>
+    public int AnzahlMeldungen
+    {
+        get
+        {
+            lock (_sperre)
+            {
+                return Meldungen.Count;
+            }
+        }
+    }
+
     /// <summary>Sendet eine Abfrage und wartet die angegebene Zeit auf Antworten.</summary>
     public (IReadOnlyList<T02Meldung> Meldungen, byte[] Roh) Abfragen(byte[] befehl, TimeSpan warten)
     {

@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\PhoMiniPrint.Printer\PhoMiniPrint.Printer.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>$(WindowsTfm)</TargetFramework>
     <UseWPF>true</UseWPF>
