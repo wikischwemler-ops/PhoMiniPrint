@@ -1,7 +1,7 @@
 <Project>
   <!-- Einzige Stelle für die Versionsnummer (FR-018, Schema MAJOR.MINOR.PATCH). -->
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Version>1.0.0</Version>
     <!-- Produktversion der EXE ohne angehängten Git-Commit, damit sie mit Installer und Info-Fenster übereinstimmt. -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Product>PhoMiniPrint</Product>

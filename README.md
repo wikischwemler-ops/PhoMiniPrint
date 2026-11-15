@@ -25,7 +25,7 @@
 
 ## Stand
 
-🛠️ **Umsetzung** – freigegeben am 2026-11-15. M0 (Grundgerüst), M1 (Prototyp am T02), M2 (Kern: Maße, Rendern, Druckauftrag), M3 (Oberfläche mit Bandansicht, Reglern und Druckanimation), M4 (Text mit Symbolen), M5 (Kalibrierung und Einstellungen), M6 (Druckerstatus) und M7 (Info-Fenster und Installer) fertig – exakter Druck 40 × 40 mm am Gerät bestätigt.
+✅ **Version 1.0.0** – alle Meilensteine M0–M8 umgesetzt, Abnahme siehe [docs/ABNAHME.md](docs/ABNAHME.md). Exakter Druck 40 × 40 mm am Gerät bestätigt. Installer: `tools/installer_bauen.ps1`.
 
 ```bash
 dotnet build PhoMiniPrint.slnx
