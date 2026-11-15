@@ -38,7 +38,8 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 |---|---|
 | M0 Grundgerüst | ✅ umgesetzt (PR `chore/grundgeruest`), CI-Workflow folgt (A-02) |
 | M1 Prototyp T02 | ✅ umgesetzt, Ergebnis in [PROTOTYP_ERGEBNIS.md](PROTOTYP_ERGEBNIS.md) – Entscheidungen E-1 bis E-3 getroffen (A, A, A) |
-| M2–M8 | offen; M2 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
+| M2 Kern | ✅ umgesetzt (PR `feat/kern-rendern`), ohne Papier geprüft – 38 Unit-Tests |
+| M3–M8 | offen; M3 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
 
 ### Abweichungen vom Plan
 
@@ -46,6 +47,7 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 |---|---|---|
 | A-01 | Lösungsdatei heißt `PhoMiniPrint.slnx` statt `.sln` | neues Standardformat des .NET-10-SDK, von Visual Studio 2022/2026 und `dotnet` unterstützt |
 | A-02 | GitHub-Actions-Workflow aus M0 herausgenommen, folgt in eigenem PR | Dem GitHub-Token fehlt das Recht `workflow`; Entscheidung des Benutzers 2026-11-15. Build und Tests wurden lokal geprüft. |
+| A-03 | `PhoMiniPrint.Core` verweist auf `PhoMiniPrint.Printer` (nutzt `Rasterbild` und die T02-Eckdaten) | vermeidet doppelte Definitionen; `Printer` bleibt ohne Oberfläche und ohne Kern-Abhängigkeit |
 
 
 ### M0 – Grundgerüst · Branch `chore/grundgeruest`
