@@ -28,12 +28,17 @@ public static class Druckdienst
     private const byte KennungPapier = 0x06;
     private const byte WertKeinPapier = 0x88;
 
-    /// <summary>Sucht den ersten gekoppelten T02 mit COM-Port; null, wenn keiner gefunden wurde.</summary>
-    public static T02Fundstelle? DruckerSuchen()
+    /// <summary>
+    /// Sucht einen gekoppelten T02 mit COM-Port; der zuletzt verwendete (Bluetooth-Adresse) hat Vorrang.
+    /// Null, wenn keiner gefunden wurde.
+    /// </summary>
+    public static T02Fundstelle? DruckerSuchen(string? bevorzugteAdresse = null)
     {
         try
         {
-            return T02Suche.Suchen().FirstOrDefault(f => f.ComPort is not null);
+            var gefunden = T02Suche.Suchen().Where(f => f.ComPort is not null).ToList();
+            return gefunden.FirstOrDefault(f => string.Equals(f.Adresse, bevorzugteAdresse, StringComparison.OrdinalIgnoreCase))
+                   ?? gefunden.FirstOrDefault();
         }
         catch (Exception ex) when (ex is System.Management.ManagementException or System.Runtime.InteropServices.COMException or UnauthorizedAccessException)
         {
@@ -41,12 +46,12 @@ public static class Druckdienst
         }
     }
 
-    public static Druckergebnis Drucken(Druckdaten daten, IProgress<Druckfortschritt>? fortschritt = null)
+    public static Druckergebnis Drucken(Druckdaten daten, IProgress<Druckfortschritt>? fortschritt = null, string? bevorzugteAdresse = null)
     {
         ArgumentNullException.ThrowIfNull(daten);
         fortschritt?.Report(new Druckfortschritt(Druckphase.Verbinden, 0));
 
-        var drucker = DruckerSuchen();
+        var drucker = DruckerSuchen(bevorzugteAdresse);
         if (drucker?.ComPort is not { } port)
         {
             return new Druckergebnis(false, "Kein gekoppelter T02 gefunden. Bitte den Drucker einschalten und in Windows koppeln.");
