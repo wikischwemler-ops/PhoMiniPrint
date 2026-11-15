@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(WindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>PhoMiniPrint.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>

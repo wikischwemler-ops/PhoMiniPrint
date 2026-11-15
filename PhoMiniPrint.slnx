@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PhoMiniPrint.App/PhoMiniPrint.App.csproj" />
+    <Project Path="src/PhoMiniPrint.Core/PhoMiniPrint.Core.csproj" />
+    <Project Path="src/PhoMiniPrint.Printer/PhoMiniPrint.Printer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PhoMiniPrint.Tests/PhoMiniPrint.Tests.csproj" />
+  </Folder>
+</Solution>

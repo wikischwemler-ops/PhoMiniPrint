@@ -1,0 +1,16 @@
+PhoMiniPrint
+Copyright 2026 wikischwemler-ops
+
+Die Kenntnisse über das Bluetooth-Druckprotokoll des Phomemo T02
+(Befehlsfolgen, Statusmeldungen, Geräteeigenschaften) wurden aus dem
+Projekt TiMini-Print abgeleitet:
+
+  TiMini-Print – https://github.com/Dejniel/TiMini-Print
+  Lizenziert unter der Apache License, Version 2.0
+  https://www.apache.org/licenses/LICENSE-2.0
+
+Der Programmcode von PhoMiniPrint ist eine eigene Umsetzung in C#;
+es wurde kein Quelltext aus TiMini-Print übernommen.
+
+Phomemo ist eine Marke des jeweiligen Inhabers. PhoMiniPrint ist ein
+unabhängiges Projekt und steht in keiner Verbindung zum Hersteller.

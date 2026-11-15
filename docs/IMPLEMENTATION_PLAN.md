@@ -1,7 +1,7 @@
 # Umsetzungsplan – PhoMiniPrint
 
-- **Projektstatus:** TECHNISCHE PLANUNG → wartet auf Prüfung durch den Benutzer
-- **Nächste Freigabe:** „UMSETZUNG FREIGEBEN“ (Abschnitt 16 der Vorlage). Ohne diese Freigabe wird kein Code geschrieben.
+- **Projektstatus:** UMSETZUNG FREIGEGEBEN (2026-11-15) → IMPLEMENTIERUNG
+- **Freigabe:** „UMSETZUNG FREIGEBEN“ durch den Benutzer am 2026-11-15. Die Planungsannahmen in Abschnitt 2 gelten damit als Startwerte und bleiben änderbar.
 - **Bezug:** [REQUIREMENTS.md](REQUIREMENTS.md), [FUNCTIONAL_DESIGN.md](FUNCTIONAL_DESIGN.md), [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ---
@@ -31,6 +31,22 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 | Technik | .NET 10, SPP über COM-Port, MVVM, Inno Setup, xUnit, GitHub Actions (siehe ARCHITECTURE.md 1.2) |
 
 ## 3. Meilensteine
+
+### Fortschritt
+
+| Meilenstein | Stand |
+|---|---|
+| M0 Grundgerüst | ✅ umgesetzt (PR `chore/grundgeruest`), CI-Workflow folgt (A-02) |
+| M1 Prototyp T02 | ⏳ als Nächstes |
+| M2–M8 | offen |
+
+### Abweichungen vom Plan
+
+| Nr. | Abweichung | Grund |
+|---|---|---|
+| A-01 | Lösungsdatei heißt `PhoMiniPrint.slnx` statt `.sln` | neues Standardformat des .NET-10-SDK, von Visual Studio 2022/2026 und `dotnet` unterstützt |
+| A-02 | GitHub-Actions-Workflow aus M0 herausgenommen, folgt in eigenem PR | Dem GitHub-Token fehlt das Recht `workflow`; Entscheidung des Benutzers 2026-11-15. Build und Tests wurden lokal geprüft. |
+
 
 ### M0 – Grundgerüst · Branch `chore/grundgeruest`
 - Lösung `PhoMiniPrint.sln` mit den Projekten App, Core, Printer, Tests.
