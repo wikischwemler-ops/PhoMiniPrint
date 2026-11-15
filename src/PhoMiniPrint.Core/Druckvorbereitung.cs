@@ -27,7 +27,14 @@ public static class Druckvorbereitung
         }
 
         var bild = Renderer.Rastern(etikett, einstellungen.StaerkeSchwarzProzent, einstellungen.Kalibrierung);
-        var stufe = T02Befehle.DichtestufeAusProzent(einstellungen.DruckdichteProzent);
+        return AusRaster(bild, einstellungen.DruckdichteProzent);
+    }
+
+    /// <summary>Druckauftrag aus einem fertigen Raster (z. B. Kalibrier-Testseite).</summary>
+    public static Druckdaten AusRaster(Rasterbild bild, int druckdichteProzent)
+    {
+        ArgumentNullException.ThrowIfNull(bild);
+        var stufe = T02Befehle.DichtestufeAusProzent(druckdichteProzent);
         var auftrag = T02Befehle.Druckauftrag(bild, stufe);
         var zeilen = T02Befehle.Vorlaufzeilen + bild.Hoehe + T02Befehle.Nachlaufzeilen;
         return new Druckdaten(auftrag, bild, zeilen);

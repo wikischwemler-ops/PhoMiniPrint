@@ -1,0 +1,62 @@
+<Window x:Class="PhoMiniPrint.App.KalibrierDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Kalibrierung" Width="520" SizeToContent="Height"
+        ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Icon="{StaticResource ProgrammIcon}"
+        Background="{StaticResource Hintergrund}"
+        Language="de-DE">
+    <StackPanel Margin="18">
+        <TextBlock FontSize="13" TextWrapping="Wrap" Foreground="{StaticResource TextGedimmt}"
+                   Text="Gleicht kleine Abweichungen von Druckkopf und Papiervorschub aus, damit Ausdrucke auf ±1 mm genau sind." />
+
+        <Border Style="{StaticResource Karte}" Margin="0,14,0,10">
+            <StackPanel>
+                <TextBlock Style="{StaticResource Ueberschrift}" Text="1 · TESTSEITE DRUCKEN" />
+                <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"
+                           Text="Druckt einen Rahmen mit dem Sollmaß 80 × 40 mm (verbraucht etwa 91 mm Papier)." />
+                <Button x:Name="TestseiteKnopf" HorizontalAlignment="Left" Padding="16,6" Click="Testseite_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" Text="&#xE749;" VerticalAlignment="Center" Margin="0,0,8,0" />
+                        <TextBlock Text="Testseite drucken" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource Karte}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource Ueberschrift}" Text="2 · RAHMEN AUSSEN MESSEN UND EINTRAGEN" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="8" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="Länge (entlang des Bandes, soll 80 mm)" />
+                    <TextBox x:Name="LaengeFeld" Grid.Column="1" Text="80" TextChanged="Feld_TextChanged" />
+                    <TextBlock Grid.Column="2" Margin="6,0,0,0" VerticalAlignment="Center" Foreground="{StaticResource TextGedimmt}" Text="mm" />
+                    <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Höhe (quer zum Band, soll 40 mm)" />
+                    <TextBox x:Name="HoeheFeld" Grid.Row="2" Grid.Column="1" Text="40" TextChanged="Feld_TextChanged" />
+                    <TextBlock Grid.Row="2" Grid.Column="2" Margin="6,0,0,0" VerticalAlignment="Center" Foreground="{StaticResource TextGedimmt}" Text="mm" />
+                </Grid>
+                <TextBlock x:Name="ErgebnisText" Margin="0,12,0,0" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <TextBlock x:Name="AktuellText" Foreground="{StaticResource TextGedimmt}" FontSize="12" Margin="2,0,2,14" />
+
+        <DockPanel>
+            <Button DockPanel.Dock="Left" Padding="14,6" Content="Zurücksetzen" ToolTip="Beide Faktoren auf 1,0 setzen" Click="Zuruecksetzen_Click" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="SpeichernKnopf" Style="{StaticResource KnopfHaupt}" FontSize="13" Padding="22,6" Content="Speichern" Click="Speichern_Click" />
+                <Button Margin="8,0,0,0" Padding="18,6" IsCancel="True" Content="Schließen" />
+            </StackPanel>
+        </DockPanel>
+    </StackPanel>
+</Window>

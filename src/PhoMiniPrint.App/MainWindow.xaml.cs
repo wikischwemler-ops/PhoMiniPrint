@@ -23,6 +23,10 @@ public partial class MainWindow : Window
     /// <summary>Zuletzt verwendete Formatierung als Vorlage für den nächsten Text.</summary>
     private TextElement _textVorlage = new();
 
+    private readonly Einstellungsspeicher _speicher = new(Einstellungsspeicher.StandardPfad);
+    private Einstellungen _einstellungen = Einstellungen.Standard;
+    private bool _einstellungenZurueckgesetzt;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -34,7 +38,13 @@ public partial class MainWindow : Window
         Ansicht.EntfernenGewuenscht += (_, _) => Entfernen_Click(this, new RoutedEventArgs());
         Ansicht.BearbeitenGewuenscht += (_, _) => TextBearbeiten_Click(this, new RoutedEventArgs());
         Ansicht.GroesseGeaendert += (_, _) => SchriftNachfuehren(Ansicht.Auswahl);
-        StaerkeRegler.WertGeaendert += (_, _) => AktualisierenPlanen();
+        StaerkeRegler.WertGeaendert += (_, _) =>
+        {
+            AktualisierenPlanen();
+            EinstellungenSpeichern();
+        };
+        DichteRegler.WertGeaendert += (_, _) => EinstellungenSpeichern();
+        EinstellungenLaden();
 
         foreach (var feld in new[] { LaengeFeld, RandLinksFeld, RandRechtsFeld, RandObenFeld, RandUntenFeld })
         {
@@ -57,8 +67,43 @@ public partial class MainWindow : Window
                 BildLaden(argumente[1]);
             }
 
+            if (_einstellungenZurueckgesetzt)
+            {
+                MessageBox.Show(this, "Die gespeicherten Einstellungen waren nicht lesbar. Einstellungen wurden zurückgesetzt.",
+                    "Einstellungen", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
             await DruckerSuchenAsync();
         };
+    }
+
+    // ---------- Einstellungen (F-10) ----------
+
+    private void EinstellungenLaden()
+    {
+        var (einstellungen, zurueckgesetzt) = _speicher.Laden();
+        _einstellungen = einstellungen;
+        _einstellungenZurueckgesetzt = zurueckgesetzt;
+        _etikett.Laenge = einstellungen.Laenge;
+        _etikett.Raender = einstellungen.Raender;
+        StaerkeRegler.Wert = einstellungen.StaerkeSchwarzProzent;
+        DichteRegler.Wert = einstellungen.DruckdichteProzent;
+    }
+
+    /// <summary>Speichert nach jeder Änderung von Länge, Rändern, Reglern, Kalibrierung oder Drucker.</summary>
+    private void EinstellungenSpeichern()
+    {
+        _einstellungen = _einstellungen with
+        {
+            Laenge = _etikett.Laenge,
+            Raender = _etikett.Raender,
+            StaerkeSchwarzProzent = StaerkeRegler.Wert,
+            DruckdichteProzent = DichteRegler.Wert,
+        };
+        if (_einstellungen.IstGueltig() && !_speicher.Speichern(_einstellungen))
+        {
+            StatusSetzen("Einstellungen konnten nicht gespeichert werden.", "Fehler");
+        }
     }
 
     // ---------- Etikett und Felder ----------
@@ -119,6 +164,7 @@ public partial class MainWindow : Window
         EtikettFelderAnzeigen();
         Ansicht.InvalidateVisual();
         Aktualisieren();
+        EinstellungenSpeichern();
     }
 
     private void ElementFelderAnzeigen()
@@ -400,7 +446,8 @@ public partial class MainWindow : Window
     private async Task DruckerSuchenAsync()
     {
         StatusText.Text = "Drucker: wird gesucht …";
-        var drucker = await Task.Run(Druckdienst.DruckerSuchen);
+        var letzter = _einstellungen.LetzterDrucker;
+        var drucker = await Task.Run(() => Druckdienst.DruckerSuchen(letzter));
         if (drucker is null)
         {
             StatusSetzen("Drucker: kein gekoppelter T02 gefunden", "Fehler");
@@ -408,6 +455,11 @@ public partial class MainWindow : Window
         else
         {
             StatusSetzen($"Drucker: {drucker.Name} gekoppelt ({drucker.ComPort})", "Erfolg");
+            if (!string.Equals(drucker.Adresse, letzter, StringComparison.OrdinalIgnoreCase))
+            {
+                _einstellungen = _einstellungen with { LetzterDrucker = drucker.Adresse };
+                EinstellungenSpeichern();
+            }
         }
     }
 
@@ -427,7 +479,7 @@ public partial class MainWindow : Window
         Druckdaten daten;
         try
         {
-            daten = Druckvorbereitung.Erstellen(_etikett, new Druckeinstellungen(StaerkeRegler.Wert, DichteRegler.Wert, Kalibrierung.Keine));
+            daten = Druckvorbereitung.Erstellen(_etikett, new Druckeinstellungen(StaerkeRegler.Wert, DichteRegler.Wert, _einstellungen.Kalibrierung));
         }
         catch (InvalidOperationException ex)
         {
@@ -435,14 +487,21 @@ public partial class MainWindow : Window
             return;
         }
 
+        await DruckenAsync(daten, _etikett.Laenge);
+    }
+
+    /// <summary>Sendet den Auftrag mit Druckanimation (FR-022); liefert true bei Erfolg.</summary>
+    private async Task<bool> DruckenAsync(Druckdaten daten, double laengeMm)
+    {
         _druckt = true;
         Aktualisieren();
         Animation.Starten();
         IllustrationTitel.Text = "Verbinde mit dem Drucker …";
-        IllustrationText.Text = $"{Zahl(_etikett.Laenge)} mm · Druckdichte Stufe {Printer.T02Befehle.DichtestufeAusProzent(DichteRegler.Wert)}";
+        IllustrationText.Text = $"{Zahl(laengeMm)} mm · Druckdichte Stufe {Printer.T02Befehle.DichtestufeAusProzent(DichteRegler.Wert)}";
 
         var fortschritt = new Progress<Druckfortschritt>(FortschrittAnzeigen);
-        var ergebnis = await Task.Run(() => Druckdienst.Drucken(daten, fortschritt));
+        var letzter = _einstellungen.LetzterDrucker;
+        var ergebnis = await Task.Run(() => Druckdienst.Drucken(daten, fortschritt, letzter));
 
         Animation.Beenden(ergebnis.Erfolgreich);
         IllustrationTitel.Text = ergebnis.Erfolgreich ? "Fertig" : "Nicht gedruckt";
@@ -453,6 +512,54 @@ public partial class MainWindow : Window
         _druckt = false;
         Animation.Ruhe();
         Aktualisieren();
+        return ergebnis.Erfolgreich;
+    }
+
+    // ---------- Kalibrierung (F-09) ----------
+
+    private async void Kalibrieren_Click(object sender, RoutedEventArgs e)
+    {
+        while (!_druckt)
+        {
+            var dialog = new KalibrierDialog(_einstellungen.Kalibrierung, druckenMoeglich: true) { Owner = this };
+            if (dialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            switch (dialog.Aktion)
+            {
+                case KalibrierAktion.TestseiteDrucken:
+                    // Testseite mit den bisherigen Faktoren; danach erscheint der Dialog zum Eintragen der Messwerte.
+                    var daten = Druckvorbereitung.AusRaster(Kalibrierrechnung.Testseite(_einstellungen.Kalibrierung), DichteRegler.Wert);
+                    await DruckenAsync(daten, Kalibrierrechnung.TestseiteLaengeMm);
+                    continue;
+                case KalibrierAktion.Gespeichert:
+                case KalibrierAktion.Zurueckgesetzt:
+                    KalibrierungSetzen(dialog.Ergebnis ?? Kalibrierung.Keine);
+                    return;
+                default:
+                    return;
+            }
+        }
+    }
+
+    private void KalibrierungZuruecksetzen_Click(object sender, RoutedEventArgs e)
+    {
+        if (MessageBox.Show(this, "Beide Kalibrierfaktoren auf 1,0 zurücksetzen?", "Kalibrierung",
+                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+        {
+            KalibrierungSetzen(Kalibrierung.Keine);
+        }
+    }
+
+    private void KalibrierungSetzen(Kalibrierung kalibrierung)
+    {
+        _einstellungen = _einstellungen with { Kalibrierung = kalibrierung };
+        EinstellungenSpeichern();
+        StatusSetzen(
+            $"Kalibrierung gespeichert: Länge × {kalibrierung.FaktorLaenge.ToString("0.0000", Deutsch)} · Höhe × {kalibrierung.FaktorHoehe.ToString("0.0000", Deutsch)}",
+            "Erfolg");
     }
 
     private void FortschrittAnzeigen(Druckfortschritt f)
