@@ -1,0 +1,82 @@
+<UserControl x:Class="PhoMiniPrint.App.Steuerelemente.DruckerAnimation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Nachbau von docs/bilder/drucker.svg (800 × 460) mit animierbaren Teilen (FR-022). -->
+    <Viewbox Stretch="Uniform">
+        <Canvas Width="800" Height="460">
+            <Canvas.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="Segoe UI" />
+                </Style>
+            </Canvas.Resources>
+
+            <!-- Schatten -->
+            <Ellipse Canvas.Left="160" Canvas.Top="392" Width="340" Height="32" Fill="Black" Opacity="0.45" />
+
+            <!-- Papier: ragt aus dem Schlitz (y = 262), beschnitten am Schlitz -->
+            <Canvas Width="800" Height="262">
+                <Canvas.Clip>
+                    <RectangleGeometry Rect="0,0,800,262" />
+                </Canvas.Clip>
+                <Canvas x:Name="Papier">
+                    <Canvas.RenderTransform>
+                        <TranslateTransform x:Name="PapierVersatz" Y="0" />
+                    </Canvas.RenderTransform>
+                    <Path Stroke="#D8D2C8" StrokeThickness="2"
+                          Data="M250,262 L250,70 L262,58 L274,70 L286,58 L298,70 L310,58 L322,70 L334,58 L346,70 L358,58 L370,70 L382,58 L394,70 L406,58 L418,70 L418,262 Z">
+                        <Path.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Offset="0" Color="White" />
+                                <GradientStop Offset="1" Color="#F1EFEA" />
+                            </LinearGradientBrush>
+                        </Path.Fill>
+                    </Path>
+                    <TextBlock Canvas.Left="250" Canvas.Top="82" Width="168" TextAlignment="Center"
+                               FontFamily="Segoe UI Symbol" FontSize="30" Foreground="#1C1C1C" Text="★  ✓  ♥" />
+                    <TextBlock Canvas.Left="250" Canvas.Top="130" Width="168" TextAlignment="Center"
+                               FontSize="17" FontWeight="Bold" Foreground="#1C1C1C" Text="PhoMiniPrint" />
+                    <Path Stroke="#F26B1D" StrokeThickness="3" Data="M268,196 H400 M266,184 V208 M402,184 V208" />
+                    <Path Fill="#F26B1D" Data="M266,196 l12,-7 v14 z M402,196 l-12,-7 v14 z" />
+                    <TextBlock Canvas.Left="250" Canvas.Top="203" Width="168" TextAlignment="Center"
+                               FontSize="18" FontWeight="Bold" Foreground="#F26B1D" Text="40 mm" />
+                </Canvas>
+            </Canvas>
+
+            <!-- Gehäuse -->
+            <Rectangle Canvas.Left="180" Canvas.Top="250" Width="300" Height="150" RadiusX="56" RadiusY="56">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Offset="0" Color="#FBF7F1" />
+                        <GradientStop Offset="1" Color="#E4DDD2" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Path Fill="#F26B1D" Data="M236,250 H424 A56,56 0 0 1 480,306 V310 H180 V306 A56,56 0 0 1 236,250 Z" />
+            <Rectangle Canvas.Left="238" Canvas.Top="258" Width="192" Height="10" RadiusX="5" RadiusY="5" Fill="#2A2A2A" />
+            <Ellipse Canvas.Left="404" Canvas.Top="336" Width="32" Height="32" Fill="#F26B1D" />
+            <Ellipse Canvas.Left="413" Canvas.Top="345" Width="14" Height="14" Stroke="White" StrokeThickness="2.5" />
+            <Path Stroke="White" StrokeThickness="2.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="M420,341 V350" />
+            <Ellipse x:Name="Led" Canvas.Left="373" Canvas.Top="347" Width="10" Height="10" Fill="#3ECF8E" />
+            <Rectangle Canvas.Left="204" Canvas.Top="322" Width="120" Height="8" RadiusX="4" RadiusY="4" Fill="White" Opacity="0.55" />
+
+            <!-- Funkwellen: laufen während der Übertragung vom PC zum Drucker -->
+            <Path x:Name="Welle1" Stroke="#F26B1D" StrokeThickness="5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Data="M512,300 a26,26 0 0 1 0,40" Opacity="1" />
+            <Path x:Name="Welle2" Stroke="#F26B1D" StrokeThickness="5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Data="M532,284 a48,48 0 0 1 0,72" Opacity="0.75" />
+            <Path x:Name="Welle3" Stroke="#F26B1D" StrokeThickness="5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Data="M552,268 a70,70 0 0 1 0,104" Opacity="0.5" />
+
+            <!-- PC -->
+            <Rectangle Canvas.Left="600" Canvas.Top="262" Width="150" Height="96" RadiusX="10" RadiusY="10"
+                       Fill="#2B313B" Stroke="#4A5260" StrokeThickness="3" />
+            <Rectangle Canvas.Left="612" Canvas.Top="274" Width="126" Height="72" RadiusX="4" RadiusY="4" Fill="#12161C" />
+            <Path Fill="#3A414C" Data="M580,366 H770 l-14,18 H594 Z" />
+            <Rectangle Canvas.Left="626" Canvas.Top="286" Width="98" Height="48" RadiusX="4" RadiusY="4"
+                       Stroke="#F26B1D" StrokeThickness="3" />
+            <Path Stroke="#F26B1D" StrokeThickness="3" Data="M626,297 H724" />
+            <Rectangle Canvas.Left="640" Canvas.Top="306" Width="70" Height="20" RadiusX="2" RadiusY="2" Fill="White" />
+            <Path Stroke="#1C1C1C" StrokeThickness="3" Data="M646,316 H704" />
+        </Canvas>
+    </Viewbox>
+</UserControl>
