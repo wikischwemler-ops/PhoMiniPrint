@@ -135,6 +135,39 @@ public sealed class SppVerbindung : IDisposable
         }
     }
 
+    /// <summary>
+    /// Sendet eine Abfrage und wartet höchstens <paramref name="frist"/> auf die erste Antwort mit der Kennung.
+    /// Liefert die Antwort (oder null) und die gemessene Antwortzeit.
+    /// </summary>
+    public (T02Meldung? Antwort, TimeSpan Dauer) AbfrageMitAntwort(byte[] befehl, byte kennung, TimeSpan frist)
+    {
+        var vorher = AnzahlMeldungen;
+        var uhr = System.Diagnostics.Stopwatch.StartNew();
+        Senden(befehl);
+        while (uhr.Elapsed < frist)
+        {
+            lock (_sperre)
+            {
+                foreach (var m in Meldungen.Skip(vorher))
+                {
+                    if (m.Kennung == kennung)
+                    {
+                        return (m, uhr.Elapsed);
+                    }
+                }
+            }
+
+            Thread.Sleep(10);
+        }
+
+        return (null, uhr.Elapsed);
+    }
+
+    /// <summary>Wird bei jeder empfangenen Meldung ausgelöst (auf dem Empfangs-Thread).</summary>
+    public event EventHandler<T02Meldung>? MeldungEmpfangen;
+
+    public bool IstOffen => _port.IsOpen;
+
     private void Empfangen()
     {
         try
@@ -147,10 +180,17 @@ public sealed class SppVerbindung : IDisposable
 
             var puffer = new byte[anzahl];
             var gelesen = _port.Read(puffer, 0, anzahl);
+            IReadOnlyList<T02Meldung> neu;
             lock (_sperre)
             {
                 _rohdaten.AddRange(puffer.AsSpan(0, gelesen));
-                Meldungen.AddRange(_leser.Hinzufuegen(puffer.AsSpan(0, gelesen)));
+                neu = _leser.Hinzufuegen(puffer.AsSpan(0, gelesen));
+                Meldungen.AddRange(neu);
+            }
+
+            foreach (var meldung in neu)
+            {
+                MeldungEmpfangen?.Invoke(this, meldung);
             }
         }
         catch (Exception ex) when (ex is IOException or InvalidOperationException or TimeoutException)

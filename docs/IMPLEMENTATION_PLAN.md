@@ -42,7 +42,8 @@ Diese Werte füllen Lücken, die in den Anforderungen bewusst offen geblieben si
 | M3 Bandansicht | ✅ umgesetzt (PR `feat/bandansicht`), Oberfläche am Bildschirm geprüft, 48 Unit-Tests; Druck und Animation noch nicht am Gerät (Abnahmedruck nur nach Zustimmung) |
 | M4 Text | ✅ umgesetzt (PR `feat/text-symbole`), am Bildschirm geprüft, 56 Unit-Tests; Abnahmetext ohne Papier geprüft (jedes Zeichen gerastert) |
 | M5 Kalibrierung | ✅ umgesetzt (PR `feat/kalibrierung`), 71 Unit-Tests; Dialog und Neustart am Bildschirm geprüft; Testseite am Gerät noch nicht gedruckt |
-| M6–M8 | offen; M6 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
+| M6 Druckerstatus | ✅ umgesetzt (PR `feat/druckerstatus`), 82 Unit-Tests; am T02 ohne Druck geprüft: bereit, Akku 60 %, Papier ok, Verbindung 100 % |
+| M7–M8 | offen; M7 als Nächstes. Papier knapp: Abnahmedruck nur als kurzer Streifen nach Zustimmung |
 
 ### Abweichungen vom Plan
 
