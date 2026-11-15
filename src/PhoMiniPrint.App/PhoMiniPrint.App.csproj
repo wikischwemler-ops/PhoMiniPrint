@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(WindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>PhoMiniPrint.App</RootNamespace>
+    <AssemblyName>PhoMiniPrint</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PhoMiniPrint.Core\PhoMiniPrint.Core.csproj" />
+    <ProjectReference Include="..\PhoMiniPrint.Printer\PhoMiniPrint.Printer.csproj" />
+  </ItemGroup>
+
+</Project>

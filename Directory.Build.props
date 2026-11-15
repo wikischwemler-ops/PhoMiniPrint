@@ -1,0 +1,16 @@
+<Project>
+  <!-- Einzige Stelle für die Versionsnummer (FR-018, Schema MAJOR.MINOR.PATCH). -->
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Product>PhoMiniPrint</Product>
+    <Company>wikischwemler-ops</Company>
+    <Copyright>© 2026 wikischwemler-ops</Copyright>
+    <NeutralLanguage>de-DE</NeutralLanguage>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Windows-SDK-Version für WinRT (Bluetooth-Geräte, Signalstärke). -->
+    <WindowsTfm>net10.0-windows10.0.19041.0</WindowsTfm>
+  </PropertyGroup>
+</Project>

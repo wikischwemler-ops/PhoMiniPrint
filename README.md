@@ -25,7 +25,12 @@
 
 ## Stand
 
-📐 **Technische Planung** – Anforderungen fachlich freigegeben am 2026-11-15, Umsetzung noch nicht freigegeben.
+🛠️ **Umsetzung** – freigegeben am 2026-11-15. Meilenstein M0 (Grundgerüst) fertig, als Nächstes M1 (Prototyp am T02).
+
+```bash
+dotnet build PhoMiniPrint.slnx
+dotnet test PhoMiniPrint.slnx
+```
 
 | Dokument | Inhalt |
 |---|---|
